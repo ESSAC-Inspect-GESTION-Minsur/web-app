@@ -1,0 +1,13 @@
+[[redirects]]
+  from = "/api/v1/*"
+  to = "SERVER_URL/api/v1/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/"
+  status = 200
+
+[build]
+  command = "sed -i \"s|SERVER_URL|${SERVER_URL}|g\" netlify.toml && npm run build"
