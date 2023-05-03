@@ -62,6 +62,8 @@ const AddUserModal = ({ close, updateUser: refreshUserList }: AddUserModalProps)
     phone1: false
   })
 
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
   useEffect(() => {
     void areasService.findAll()
       .then(setAreas)
@@ -82,6 +84,7 @@ const AddUserModal = ({ close, updateUser: refreshUserList }: AddUserModalProps)
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault()
+    setIsLoading(true)
 
     const areaId = areaRef.current?.value ?? areas[0].id.toString()
     newUser.company = newUser.company.toUpperCase()
@@ -91,17 +94,20 @@ const AddUserModal = ({ close, updateUser: refreshUserList }: AddUserModalProps)
           .then(profile => {
             void areasService.assignUser(areaId, user.id)
               .then(userWithArea => {
+                setIsLoading(false)
                 userWithArea.profile = profile
                 refreshUserList(userWithArea)
                 toast('Usuario creado correctamente', { toastId: toastContext.id, type: 'success' })
               })
               .catch(error => {
+                setIsLoading(false)
                 console.log(error)
                 const { message } = error.data
                 toast(message, { toastId: toastContext.id, type: 'error' })
               })
           })
           .catch(error => {
+            setIsLoading(false)
             console.log(error)
             void usersService.remove(user.id)
 
@@ -111,11 +117,13 @@ const AddUserModal = ({ close, updateUser: refreshUserList }: AddUserModalProps)
           })
       })
       .catch(error => {
+        setIsLoading(false)
         console.log(error)
         const { message } = error.data
         toast(message, { toastId: toastContext.id, type: 'error' })
       })
       .finally(() => {
+        setIsLoading(false)
         close()
       })
   }
@@ -247,7 +255,7 @@ const AddUserModal = ({ close, updateUser: refreshUserList }: AddUserModalProps)
 
           <div className='flex justify-center gap-5'>
             <Button color='secondary' onClick={close}>Cerrar</Button>
-            <Button color='primary' type='submit' disabled={!canSubmit}>Añadir Usuario</Button>
+            <Button color='primary' type='submit' disabled={!canSubmit || isLoading} isLoading={isLoading}>Añadir Usuario</Button>
           </div>
         </form>
       </div>
