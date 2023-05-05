@@ -45,7 +45,7 @@ const Button = ({ children, color, onClick, disabled = false, type = 'button', i
     }
   }, [color, isLoading, disabled])
 
-  const loadingStyle = 'after:absolute after:w-5 after:h-5 after:top-0 after:right-0 after:left-0 after:bottom-0 after:m-auto after:border-4 after:border-t-white after:opacity-100 after:rounded-[50%] after:animate-spin'
+  const loadingStyle = 'text-transparent after:absolute after:w-5 after:h-5 after:top-0 after:right-0 after:left-0 after:bottom-0 after:m-auto after:border-4 after:border-t-white after:opacity-100 after:rounded-[50%] after:animate-spin'
 
   return (
     <button

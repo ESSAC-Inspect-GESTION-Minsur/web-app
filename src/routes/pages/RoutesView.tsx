@@ -1,11 +1,11 @@
-import React, { useState, useEffect, type ReactElement } from 'react'
+import React, { useState, useEffect, type ReactElement, useRef } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { findAllRoutes, getDateRange, getLastDateRequest, getRoutes, getStatus } from '@/shared/config/store/features/routes-slice'
 import { STATUS } from '@/shared/config/store/types'
 import { type AppDispatch } from '@/shared/config/store'
 
-import { type Route } from '../models/route.interface'
+import { routeToExcelRoute, type Route } from '../models/route.interface'
 
 import { useNavigate } from 'react-router-dom'
 import { DateRange, type DateRangeObject, LOCALE_OPTIONS } from '@/shared/models/date-range'
@@ -14,6 +14,7 @@ import Table, { type Action, type Column } from '@/shared/ui/components/table/Ta
 
 import Button from '@/shared/ui/components/Button'
 import { goToGoogleMapsPage } from '../utils/maps-utils'
+import { generateExcel } from '../utils/json-to-sheet'
 
 const RoutesView = (): ReactElement => {
   // const routeServices = new RoutesServices()
@@ -27,10 +28,17 @@ const RoutesView = (): ReactElement => {
   const [dateRange, setDateRange] = useState<DateRange>(new DateRange())
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [showFilter, setShowFilter] = useState<boolean>(false)
+  const [isExportingExcel, setIsExportingExcel] = useState<boolean>(false)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [errorMessage, setErrorMessage] = useState<string>('')
 
   const navigate = useNavigate()
+
+  const routesFiltered = useRef<Route[]>(routes)
+
+  const setRoutesFiltered = (routes: Route[]): void => {
+    routesFiltered.current = routes
+  }
 
   useEffect(() => {
     const routesJson = sessionStorage.getItem('routes-request')
@@ -53,6 +61,17 @@ const RoutesView = (): ReactElement => {
 
   const formatDate = (date: string): string => {
     return new Date(date).toLocaleDateString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit' })
+  }
+
+  const exportExcel = (): void => {
+    setIsExportingExcel(true)
+    // console.log(routesFiltered.current)
+    void generateExcel(routesFiltered.current.map(routeToExcelRoute))
+      .finally(() => {
+        setTimeout(() => {
+          setIsExportingExcel(false)
+        }, 2000)
+      })
   }
 
   const onChangeInputDate = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -102,7 +121,7 @@ const RoutesView = (): ReactElement => {
             className='hover:text-red cursor-pointer'
             onClick={() => { goToGoogleMapsPage(route.startLocation) }}
           >
-          {route.startLocation}
+            {route.startLocation}
           </p>
         )
       },
@@ -120,7 +139,7 @@ const RoutesView = (): ReactElement => {
             className='hover:text-red cursor-pointe'
             onClick={() => { goToGoogleMapsPage(route.endLocation) }}
           >
-          {route.endLocation}
+            {route.endLocation}
           </p>
         )
       },
@@ -156,10 +175,14 @@ const RoutesView = (): ReactElement => {
           return 'No hay superviciones'
         }
 
+        const filteredArray = checkpoints.filter(
+          (obj, index, self) => index === self.findIndex((o) => o.id === obj.id || o.profile.id === obj.profile.id)
+        )
+
         return (
           <select className='block w-full h-10 px-2 rounded-t-md border-b border-solid border-blue-dark outline-none capitalize'>
             {
-              ...checkpoints.map(({ profile }) => (
+              ...filteredArray.map(({ profile }) => (
                 <option key={profile.id}>{profile.name}</option>
               ))
             }
@@ -212,7 +235,10 @@ const RoutesView = (): ReactElement => {
     <div className='container-page'>
       <div className='mt-4 mb-2 flex justify-between items-center'>
         <h2 className="font-bold text-3x text-left  uppercase text-3xl">Recorridos</h2>
-        {routes.length > 0 && <Button color='primary' onClick={() => { setShowFilter(!showFilter) }}>{showFilter ? 'Ocultar filtros' : 'Mostrar filtros'}</Button>}
+        <div className='flex gap-2'>
+          {routes.length > 0 && <Button color='primary' onClick={() => { setShowFilter(!showFilter) }}>{showFilter ? 'Ocultar filtros' : 'Mostrar filtros'}</Button>}
+          {routes.length > 0 && <Button color='secondary' onClick={exportExcel} isLoading={isExportingExcel}>Exportar Excel</Button>}
+        </div>
       </div>
       <div className='w-full border-b-2 mb-3'></div>
       <p className='font-medium uppercase'>Filtro</p>
@@ -261,7 +287,14 @@ const RoutesView = (): ReactElement => {
         isLoading
           ? '...loading'
           : routes.length > 0
-            ? <Table columns={ROUTE_COLUMNS} data={routes} pagination={PAGINATION} showFilter={showFilter} actions={ROUTE_ACTIONS} />
+            ? <Table
+              columns={ROUTE_COLUMNS}
+              data={routes}
+              pagination={PAGINATION}
+              showFilter={showFilter}
+              actions={ROUTE_ACTIONS}
+              setDataFiltered={setRoutesFiltered}
+            />
             : <p className='text-center uppercase font-semibold text-red mt-10'>No hay recorridos en ese rango de fecha</p>
       }
 
