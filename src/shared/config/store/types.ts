@@ -1,7 +1,7 @@
-import { type UserStorage } from '@/iam/models/interfaces/user-storage.interface'
 import { type Report } from '@/reports/models/report.interface'
 import { type Route } from '@/routes/models/route.interface'
-import { type DateRange } from '@/shared/models/date-range'
+import { type DateRange } from '@/shared/types/date-range'
+import { type UserToStorage } from '@/users/models/user.interface'
 
 export enum STATUS {
   IDLE = 'idle',
@@ -11,7 +11,7 @@ export enum STATUS {
 }
 
 export interface AUTH_STATE {
-  user: UserStorage | null | undefined
+  user: UserToStorage | null | undefined
   authenticated: boolean
   status: STATUS
 }

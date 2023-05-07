@@ -4,7 +4,7 @@ import { type AppDispatch } from '@/shared/config/store'
 import { useDispatch, useSelector } from 'react-redux'
 import Button from '../components/Button'
 import { findAllRoutes, getDateRange, getLastDateRequest, getReports } from '@/shared/config/store/features/routes-slice'
-import { DateRange, type DateRangeObject, LOCALE_OPTIONS } from '@/shared/models/date-range'
+import { DateRange, type DateRangeObject, LOCALE_OPTIONS } from '@/shared/types/date-range'
 
 const Home = (): ReactElement => {
   // const isAboveSmallScreens = useMediaQuery('(min-width: 640px)')

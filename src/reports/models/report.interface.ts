@@ -1,10 +1,7 @@
-import { type Checkpoint } from './checkpoint.interface'
-import { type ReportType } from './report-type.interface'
+import { type Checkpoint } from '@/checkpoints/models/checkpoint.interface'
+import { REPORT_TYPE_INITIAL_STATE, type ReportType } from './report-type.interface'
 
 export interface Report {
-  createdAt: string
-  updatedAt: string
-  active: boolean
   id: string
   location: string
   checked: boolean
@@ -12,4 +9,21 @@ export interface Report {
   checkpoints: Checkpoint[]
   routeId: string
   reportType: ReportType
+
+  createdAt: string
+  updatedAt: string
+  active: boolean
+}
+
+export const REPORT_INITIAL_STATE: Report = {
+  createdAt: '',
+  updatedAt: '',
+  id: '',
+  location: '',
+  checked: false,
+  active: true,
+  type: '',
+  checkpoints: [],
+  routeId: '',
+  reportType: REPORT_TYPE_INITIAL_STATE
 }

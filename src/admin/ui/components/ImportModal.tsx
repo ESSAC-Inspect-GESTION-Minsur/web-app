@@ -1,33 +1,60 @@
-import { AdminService } from '@/admin/services/admin.service'
-import Modal from '@/shared/ui/components/Modal'
 import React, { type ReactElement, useState } from 'react'
+import { AdminService } from '@/admin/services/admin.service'
+import { useBooleanState } from '@/shared/hooks/useBooleanState'
 import { toast } from 'react-toastify'
+import Modal from '@/shared/ui/components/Modal'
+import Divider from '@/shared/ui/components/Divider'
+import Button from '@/shared/ui/components/Button'
 
-type ImportObject = 'user' | 'vehicle' | 'company' | 'assign-user-company' | 'assign-vehicle-company'
+type ImportObject = 'user' | 'vehicle' | 'company' | 'assign-user-company' | 'assign-vehicle-company' | 'cart'
 
 interface ImportExcelProps {
-  close: () => void
-  refreshList: (data: any) => void
+  isOpen: boolean
   type: ImportObject
   toastId: string
+  onSuccess: (data: any) => void
+  onClose: () => void
 }
 
-const ImportExcel = ({ close, refreshList, toastId, type }: ImportExcelProps): ReactElement => {
+const ImportExcel = ({ isOpen, onClose, onSuccess, toastId, type }: ImportExcelProps): ReactElement => {
   const adminService = new AdminService()
   const [file, setFile] = useState<File | null | undefined>(null)
   const [errors, setErrors] = useState<string[]>([])
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, toggleLoading, setIsLoading] = useBooleanState()
+
+  const reset = (): void => {
+    setFile(null)
+    setErrors([])
+  }
+
+  const handleCancel = (): void => {
+    reset()
+    onClose()
+  }
+
+  const getTitle = (): string => {
+    const titles = {
+      user: 'Usuarios',
+      vehicle: 'Vehículos',
+      company: 'Empresas',
+      cart: 'Semirremolques',
+      'assign-user-company': 'Asignar usuarios a empresas',
+      'assign-vehicle-company': 'Asignar vehículos a empresas'
+    }
+
+    return titles[type]
+  }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault()
 
     if (file === null || file === undefined) {
-      setErrors(['No se ha subido nigún archivo'])
-      toast('No se ha subido nigún archivo', { toastId, type: 'error' })
+      setErrors(['No se ha subido ningún archivo'])
+      toast('No se ha subido ningún archivo', { toastId, type: 'error' })
       return
     }
 
-    setIsLoading(true)
+    toggleLoading()
     const formData = new FormData()
     formData.append('excel-file', file)
 
@@ -35,17 +62,16 @@ const ImportExcel = ({ close, refreshList, toastId, type }: ImportExcelProps): R
       user: adminService.importUserExcel,
       vehicle: adminService.importVehicleExcel,
       company: adminService.importCompanyExcel,
+      cart: adminService.importCartExcel,
       'assign-user-company': adminService.importAssignUserCompanyExcel,
       'assign-vehicle-company': adminService.importAssignVehicleCompanyExcel
     }
-
     const importExcelFunction = importFunctions[type]
 
     void importExcelFunction(formData)
       .then(response => {
         const { data, dataMissed } = response
-        refreshList(data)
-        setIsLoading(false)
+        onSuccess(data)
 
         if (dataMissed.length > 0) {
           setErrors(dataMissed)
@@ -54,13 +80,15 @@ const ImportExcel = ({ close, refreshList, toastId, type }: ImportExcelProps): R
         }
 
         toast('La información se importó correctamente', { toastId, type: 'success' })
-        close()
+        onClose()
       })
       .catch(error => {
         const { message } = error.data
-        setIsLoading(false)
         setErrors([message])
         toast(message, { toastId, type: 'error' })
+      })
+      .finally(() => {
+        setIsLoading(false)
       })
   }
 
@@ -85,32 +113,31 @@ const ImportExcel = ({ close, refreshList, toastId, type }: ImportExcelProps): R
     setFile(file)
   }
 
+  const handleClickInput = (): void => {
+    if (isLoading) return
+    setErrors([])
+  }
+
   return (
-    <Modal>
-      <div className='p-5'>
-        {isLoading && (
-          <div className='bg-gray-light absolute top-0 left-0 w-full h-full rounded-xl after:absolute after:w-10 after:h-10 after:top-0 after:right-0 after:left-0 after:bottom-0 after:m-auto after:border-8 after:border-t-white after:opacity-100 after:rounded-[50%] after:animate-spin'>
-          </div>
-        )}
-        <h1 className='block uppercase text-center text-xl font-bold'>Importar excel</h1>
+    <Modal isOpen={isOpen} onClose={handleCancel}>
+      <div className=''>
+        <h1 className='uppercase text-center text-xl font-bold'>Importar excel {getTitle()}</h1>
+        <Divider className='mt-1'></Divider>
         <form onSubmit={handleSubmit}>
           <div className='mt-5'>
-            <input onChange={onChange} type="file" accept='.xlsx,.xlsm,.xls,.xlt,.xlsb' />
+            <input onClick={handleClickInput} onChange={onChange} type="file" accept='.xlsx,.xlsm,.xls,.xlt,.xlsb' />
             <div className='max-h-[150px] overflow-y-scroll mt-4'>
               {
-                errors.map((error, index) => (<p className='m-0 mt-1 text-red max-w-[80%]' key={index}>{error}</p>))
+                errors.map((error) => (<p className='m-0 mt-1 text-red max-w-[80%]' key={error}>{error}</p>))
               }
             </div>
-
           </div>
-
-          <div className='mt-5 flex gap-3 justify-center'>
-            <button className='bg-black text-white px-5 py-1 rounded-lg text-lg' type='button' onClick={close}>Cancelar</button>
-            <button className={'relative bg-red text-white px-5 py-1 rounded-lg text-lg'} type='submit'>Importar</button>
+          <div className='mt-2 flex gap-3 justify-center'>
+            <Button color='secondary' onClick={handleCancel}>Cancelar</Button>
+            <Button color='primary' type='submit' isLoading={isLoading}>Importar</Button>
           </div>
         </form>
       </div>
-
     </Modal>
   )
 }

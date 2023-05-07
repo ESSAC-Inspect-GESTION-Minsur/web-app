@@ -38,7 +38,7 @@ const TableHeader = ({ columns, hasActions }: TableHeaderProps): ReactElement =>
           columns?.map((column, index) => (
             <th key={index} onClick={() => { onClick(column) }} className={`${tableHeadStyle} ${column.sortFunc !== undefined ? 'cursor-pointer' : ''}`}>
               <p className='flex items-center justify-center gap-4'>
-                {column.columnName.toUpperCase()}
+                {column.columnName}
                 {sortIcon(column)}
               </p>
             </th>

@@ -1,25 +1,25 @@
+import LoginView from '@/auth/ui/pages/LoginView'
+import CheckpointsView from '@/checkpoints/ui/pages/CheckpointsView'
+import FieldsView from '@/fields/ui/pages/FieldsView'
+import CompaniesView from '@/profiles/ui/pages/CompaniesView'
+import ProfileView from '@/profiles/ui/pages/ProfileView'
+import ReportTypeGroupView from '@/reports/ui/pages/ReportTypeGroupView'
+import ReportTypesView from '@/reports/ui/pages/ReportTypesView'
+import RouteDetail from '@/routes/ui/pages/RouteDetail'
+import RoutesView from '@/routes/ui/pages/RoutesView'
+import AdminRequired from '@/shared/ui/components/layout/AdminRequired'
+import Layout from '@/shared/ui/components/layout/Layout'
+import Redirect from '@/shared/ui/components/layout/Redirect'
+import ErrorPage from '@/shared/ui/pages/ErrorPage'
+import Home from '@/shared/ui/pages/Home'
+import NotFound from '@/shared/ui/pages/NotFound'
+import TermsAndConditions from '@/shared/ui/pages/TermsAndConditions'
+import UsersView from '@/users/ui/pages/UsersView'
+import MaterialsView from '@/vehicles/ui/pages/MaterialsView'
+import VehicleTypesView from '@/vehicles/ui/pages/VehicleTypesView'
+import VehiclesView from '@/vehicles/ui/pages/VehiclesView'
 import React from 'react'
 import { createBrowserRouter, type RouteObject } from 'react-router-dom'
-import LoginView from '@/iam/ui/pages/LoginView'
-import RoutesView from '@/routes/pages/RoutesView'
-import Layout from '@/shared/ui/components/Layout'
-import NotFound from '@/shared/ui/pages/NotFound'
-import Home from '@/shared/ui/pages/Home'
-import ErrorPage from '@/shared/ui/pages/ErrorPage'
-import UsersView from '@/admin/ui/pages/UsersView'
-import ReportsView from '@/admin/ui/pages/ReportsView'
-import FieldsView from '@/admin/ui/pages/FieldsView'
-import ProfileView from '@/profiles/ui/pages/ProfileView'
-import VehicleTypesView from '@/admin/ui/vehicle-type'
-import RequiredAdmin from '@/admin/ui/pages/RequiredAdmin'
-import RouteDetail from '@/routes/pages/RouteDetail'
-import CheckpointsView from '@/routes/pages/CheckpointsView'
-import Redirect from '@/shared/ui/components/Redirect'
-import TermsAndConditions from '@/shared/ui/pages/TermsAndConditions'
-import VehiclesView from '@/admin/ui/pages/VehiclesView'
-import MaterialsView from '@/admin/ui/pages/MaterialsView'
-import ReportTypeGroupView from '@/admin/ui/report-type-group'
-import CompaniesView from '@/admin/ui/companies'
 
 const authRequiredRoutes: RouteObject[] = [
   {
@@ -45,19 +45,19 @@ const authRequiredRoutes: RouteObject[] = [
   },
   {
     path: 'admin',
-    element: <RequiredAdmin />,
+    element: <AdminRequired />,
     children: [
       {
         path: 'usuarios',
         element: <UsersView />
       },
       {
-        path: 'grupos-reportes',
-        element: <ReportTypeGroupView />
+        path: 'reportes',
+        element: <ReportTypesView />
       },
       {
-        path: 'reportes',
-        element: <ReportsView/>
+        path: 'grupos-reportes',
+        element: <ReportTypeGroupView />
       },
       {
         path: 'campos',
@@ -69,7 +69,11 @@ const authRequiredRoutes: RouteObject[] = [
       },
       {
         path: 'vehiculos',
-        element: <VehiclesView />
+        element: <VehiclesView areCarts={false} />
+      },
+      {
+        path: 'carretas',
+        element: <VehiclesView areCarts={true} />
       },
       {
         path: 'tipo-materiales',

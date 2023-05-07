@@ -24,7 +24,7 @@ const Filter = ({ columns }: FilterProps): ReactElement => {
 
   return (
     <Fragment>
-      <div className='flex items-end gap-5 mt-5'>
+      <div className='flex items-end gap-5 my-5'>
         <div className='grid grid-cols-filter w-3/4'>
           <p className='font-medium uppercase'>Columna a filtrar</p>
           <input
@@ -49,7 +49,6 @@ const Filter = ({ columns }: FilterProps): ReactElement => {
           </select>
         </div>
       </div>
-      <div className='w-full border-b-2 my-3'></div>
     </Fragment>
 
   )

@@ -1,16 +1,49 @@
-import React, { type ReactElement } from 'react'
+import { Dialog, Transition } from '@headlessui/react'
+import React, { Fragment, type ReactElement } from 'react'
 
-interface ModalProp {
+interface ModalProps {
+  isOpen: boolean
+  onClose: () => void
+  onTop?: boolean
+  className?: string
   children?: React.ReactNode
 }
 
-const Modal = ({ children }: ModalProp): ReactElement => {
+const Modal = ({ isOpen, onClose, className = '', onTop = false, children }: ModalProps): ReactElement => {
   return (
-    <div className="fixed top-0 left-0 w-full h-full max-h-screen bg-gray-light flex justify-center items-start z-[100] overflow-y-auto ">
-      <div className=" bg-white p-5 rounded-xl flex flex-column items-center justify-center mt-10 my-6">
-        { children }
-      </div>
-    </div>
+    <Transition appear show={isOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={onClose}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className={`flex ${!onTop ? 'min-h-full items-center' : ''} justify-center p-4 text-center`}>
+            <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className={`w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all ${className}`}>
+                  {children}
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
   )
 }
 

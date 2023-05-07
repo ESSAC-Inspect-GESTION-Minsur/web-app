@@ -3,10 +3,11 @@ import { type ReportType } from './report-type.interface'
 export interface ReportTypeGroup {
   id: string
   name: string
+  reportTypes: ReportType[]
+
   createdAt: string
   updatedAt: string
   active: boolean
-  reportTypes: ReportType[]
 }
 
 export interface ReportTypeGroupDto extends Pick<ReportTypeGroup, 'name'> {}

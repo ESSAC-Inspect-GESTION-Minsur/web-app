@@ -1,7 +1,7 @@
-import { AppServices } from '@/shared/service/app-api.service'
-import { type Profile } from '../models/profile.entity'
+import { AppServices } from '@/shared/service/api.service'
+import { type ProfileDto, type Profile } from '../models/profile.interface'
 
-export class ProfileService extends AppServices {
+export class ProfilesService extends AppServices {
   constructor () {
     super({ baseUrl: 'profiles', contentType: 'application/json' })
   }
@@ -13,6 +13,11 @@ export class ProfileService extends AppServices {
 
   findById = async (id: string): Promise<Profile> => {
     return await this.get<Profile>(`/id/${id}`)
+      .then(response => response.data)
+  }
+
+  update = async (profile: ProfileDto, id: string): Promise<Profile> => {
+    return await this.patch<Profile>(`/${id}`, profile)
       .then(response => response.data)
   }
 

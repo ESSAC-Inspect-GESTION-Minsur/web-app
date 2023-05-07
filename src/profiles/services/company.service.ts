@@ -1,4 +1,4 @@
-import { AppServices } from '@/shared/service/app-api.service'
+import { AppServices } from '@/shared/service/api.service'
 import { type CompanyDto, type Company } from '../models/company.interface'
 
 export class CompaniesService extends AppServices {

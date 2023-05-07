@@ -1,4 +1,4 @@
-import { AppServices } from '@/shared/service/app-api.service'
+import { AppServices } from '@/shared/service/api.service'
 import { type ReportTypeGroupDto, type ReportTypeGroup } from '../models/report-type-group.interface'
 
 export class ReportTypeGroupService extends AppServices {

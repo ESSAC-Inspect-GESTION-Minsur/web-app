@@ -13,7 +13,7 @@ function s2ab (s: string): ArrayBuffer {
 export async function generateExcel (data: any[]): Promise<void> {
   // Create a new workbook and add a worksheet
   try {
-    const excelName = `checklist-${moment().format('DD.MM.YYYY.h.mm.ss')}.xlsx`
+    const excelName = `checklist-${moment().format('DD.MM.YYYY.h.mm.ss') as string}.xlsx`
 
     const workbook = XLSX.utils.book_new()
     const worksheet = XLSX.utils.json_to_sheet(data)

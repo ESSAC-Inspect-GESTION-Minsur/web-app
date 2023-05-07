@@ -1,39 +1,27 @@
-import { type LoginData } from '@/iam/models/interfaces/login.interface'
-import { AuthServices } from '@/iam/services/auth.service'
 import { createAsyncThunk, createSlice, type SliceCaseReducers } from '@reduxjs/toolkit'
 import { STATUS, type AUTH_STATE } from '@/shared/config/store/types'
-import { type UserStorage } from '@/iam/models/interfaces/user-storage.interface'
+import { AuthStore } from '@/auth/services/auth.store'
+import { AuthServices } from '@/auth/services/auth.service'
+import { type UserToStorage, type UserLogin } from '@/users/models/user.interface'
 
 const getInitialState = (): AUTH_STATE => {
-  const userJson = sessionStorage.getItem('user')
-  if (!userJson) {
-    return {
-      user: null,
-      authenticated: false,
-      status: STATUS.IDLE
-    }
-  }
+  const storeService = new AuthStore()
+  const user = storeService.getUser()
 
   return {
-    user: JSON.parse(userJson),
-    authenticated: true,
-    status: STATUS.SUCCEEDED
+    user,
+    authenticated: user !== null,
+    status: user !== null ? STATUS.SUCCEEDED : STATUS.IDLE
   }
 }
 
 const INITIAL_STATE: AUTH_STATE = getInitialState()
 
-export const login = createAsyncThunk('login', async (loginData: LoginData, thunkAPI) => {
+export const login = createAsyncThunk('login', async (userLogin: UserLogin, thunkAPI) => {
   const authService = new AuthServices()
-  return await authService.login(loginData)
+  return await authService.login(userLogin)
     .then((response) => response)
-    .catch((error) => {
-      return thunkAPI.rejectWithValue(error)
-    })
-})
-
-export const register = createAsyncThunk('register', async () => {
-
+    .catch((error) => thunkAPI.rejectWithValue(error))
 })
 
 const authSlice = createSlice<AUTH_STATE, SliceCaseReducers<AUTH_STATE>>({
@@ -59,22 +47,13 @@ const authSlice = createSlice<AUTH_STATE, SliceCaseReducers<AUTH_STATE>>({
       .addCase(login.rejected, (state, action) => {
         state.status = STATUS.FAILED
       })
-      // .addCase(register.pending, (state, action) => {
-      //   state.status = AUTH_STATUS.LOADING
-      // })
-      // .addCase(register.fulfilled, (state, action) => {
-      //   state.status = AUTH_STATUS.SUCCEEDED
-      // })
-      // .addCase(register.rejected, (state, action) => {
-      //   state.status = AUTH_STATUS.FAILED
-      //   state.error = action.error.message
-      // })
   }
 })
 
 export const { logout } = authSlice.actions
 
-export const getCurrentUser = (state: any): UserStorage => state.auth.user
+export const getCurrentUser = (state: any): UserToStorage | null | undefined => state.auth.user
 export const isAuthenticated = (state: any): boolean => state.auth.authenticated
+export const getAuthStatus = (state: any): STATUS => state.auth.status
 
 export default authSlice.reducer
