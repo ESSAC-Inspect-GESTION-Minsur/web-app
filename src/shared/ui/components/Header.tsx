@@ -3,7 +3,7 @@ import React, { type ReactElement, useState } from 'react'
 import useMediaQuery from '@/shared/hooks/useMediaQuery'
 
 import BarsIcon from '@/shared/ui/assets/icons/Bars'
-import NavBar from './Navbar'
+import NavBar from './NavBar'
 
 const Header = (): ReactElement => {
   const [isMenuToggled, setIsMenuToggled] = useState(false)
