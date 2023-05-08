@@ -8,7 +8,7 @@ const AdminRequired = (): ReactElement => {
   const location = useLocation()
 
   return (
-    user.role === 'admin'
+    user?.role === 'admin'
       ? <Outlet />
       : <Navigate to='/inicio' state={{ from: location }} replace />
 
