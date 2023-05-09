@@ -6,6 +6,10 @@ import { type User } from '@/users/models/user.interface'
 import { capitalize } from '@/shared/utils'
 import EditIcon from '@/shared/ui/assets/icons/EditIcon'
 import EyeIcon from '@/shared/ui/assets/icons/EyeIcon'
+import { UsersService } from '@/users/services/user.service'
+import { toast } from 'react-toastify'
+import ToggleOnIcon from '@/shared/ui/assets/icons/ToggleOnIcon'
+import ToggleOffIcon from '@/shared/ui/assets/icons/ToggleOfIcon'
 
 interface UsersTableProps {
   toggleShowDetailModal: () => void
@@ -13,7 +17,7 @@ interface UsersTableProps {
 }
 
 const UsersTable = ({ toggleShowDetailModal, toggleShowUpdateModal }: UsersTableProps): ReactElement => {
-  const { users, setSelectedUser } = useContext(UserContext)
+  const { users, toastId, setSelectedUser, updateUser } = useContext(UserContext)
 
   const handleView = (user: User): void => {
     setSelectedUser(user)
@@ -23,6 +27,24 @@ const UsersTable = ({ toggleShowDetailModal, toggleShowUpdateModal }: UsersTable
   const handleUpdate = (user: User): void => {
     setSelectedUser(user)
     toggleShowUpdateModal()
+  }
+
+  const handleToggleActive = (user: User): void => {
+    const result = confirm(`Estás seguro que quieres ${user?.active ? 'desactivar' : 'activar'} el usuario '${user?.username ?? ''}'`)
+
+    if (!result) { return }
+
+    const usersService = new UsersService()
+    const id = user?.id ?? ''
+    void usersService.toggleActiveUser(id)
+      .then(response => {
+        updateUser(response)
+        setSelectedUser(response)
+        toast(`Usuario  ${user?.active ? 'desactivado' : 'activado'} correctamente`, { toastId, type: 'success' })
+      })
+      .catch(() => {
+        toast('Hubo un error, intente nuevamente luego', { toastId, type: 'error' })
+      })
   }
 
   const USER_COLUMNS: Array<Column<User>> = [
@@ -81,6 +103,18 @@ const UsersTable = ({ toggleShowDetailModal, toggleShowUpdateModal }: UsersTable
     {
       icon: () => (<EyeIcon className='cursor-pointer w-5 h-5 ' />),
       actionFunc: handleView
+    },
+    {
+      icon: (user: User) => (
+        <div className='cursor-pointer'>
+          {
+            user.active
+              ? (<ToggleOnIcon className='w-6 h-6 cursor-pointer text-success' />)
+              : (<ToggleOffIcon className='w-6 h-6 cursor-pointer' />)
+          }
+        </div>
+      ),
+      actionFunc: handleToggleActive
     }
   ]
 

@@ -1,11 +1,9 @@
 import React, { type ReactElement, useContext, useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
 import Button from '@/shared/ui/components/Button'
 import Modal from '@/shared/ui/components/Modal'
 
 import { UserContext } from '../contexts/UserContext'
 import { type Profile } from '@/profiles/models/profile.interface'
-import { UsersService } from '@/users/services/user.service'
 import { LOCALE_OPTIONS } from '@/shared/types/date-range'
 import ChangeRole from './ChangeRole'
 import { useBooleanState } from '@/shared/hooks/useBooleanState'
@@ -17,7 +15,7 @@ interface UserDetailModalProps {
 }
 
 const UserDetailModal = ({ isOpen, onClose }: UserDetailModalProps): ReactElement => {
-  const { toastId, selectedUser: user, updateUser, setSelectedUser } = useContext(UserContext)
+  const { selectedUser: user } = useContext(UserContext)
   const [profile, setProfile] = useState<Profile | null>(null)
 
   const [showChangeRole, toggleShowChangeRole] = useBooleanState()
@@ -26,24 +24,6 @@ const UserDetailModal = ({ isOpen, onClose }: UserDetailModalProps): ReactElemen
   useEffect(() => {
     setProfile(user?.profile ?? null)
   }, [user])
-
-  const handleDeactivate = (): void => {
-    const result = confirm(`Estás seguro que quieres ${user?.active ? 'desactivar' : 'activar'} el usuario '${user?.username ?? ''}'`)
-
-    if (!result) { return }
-
-    const usersService = new UsersService()
-    const id = user?.id ?? ''
-    void usersService.toggleActiveUser(id)
-      .then(response => {
-        updateUser(response)
-        setSelectedUser(response)
-        toast(`Usuario  ${user?.active ? 'desactivado' : 'activado'} correctamente`, { toastId, type: 'success' })
-      })
-      .catch(() => {
-        toast('Hubo un error, intente nuevamente luego', { toastId, type: 'error' })
-      })
-  }
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} className='min-w-[300px] sm:min-w-[600px]' onTop={true}>
@@ -136,7 +116,6 @@ const UserDetailModal = ({ isOpen, onClose }: UserDetailModalProps): ReactElemen
         {showAssignCompany && <AssignCompany onClose={toggleShowAssignCompany} />}
 
         <div className='mt-3 flex gap-2 items-center'>
-          <Button color='secondary' onClick={handleDeactivate}>{user?.active ? 'Desactivar' : 'Activar'}</Button>
           <Button color='success' onClick={toggleShowChangeRole}>Cambiar rol</Button>
           <Button color='success' onClick={toggleShowAssignCompany}>Asignar Empresa</Button>
         </div>
