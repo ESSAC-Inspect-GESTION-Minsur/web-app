@@ -6,8 +6,8 @@ export class AdminService extends AppServices {
     super({ baseUrl: 'admin', contentType: 'application/json' })
   }
 
-  importUserExcel = async (file: any): Promise<ExcelResponse> => {
-    return await this.post<ExcelResponse>('/import-user-excel', file)
+  importDriverExcel = async (file: any): Promise<ExcelResponse> => {
+    return await this.post<ExcelResponse>('/import-driver-excel', file)
       .then(response => response.data)
   }
 
@@ -27,7 +27,7 @@ export class AdminService extends AppServices {
   }
 
   importAssignUserCompanyExcel = async (file: any): Promise<ExcelResponse> => {
-    return await this.post<ExcelResponse>('/import-assign-company-users-excel', file)
+    return await this.post<ExcelResponse>('/import-assign-company-drivers-excel', file)
       .then(response => response.data)
   }
 

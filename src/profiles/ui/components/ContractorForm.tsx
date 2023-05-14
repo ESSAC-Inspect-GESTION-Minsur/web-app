@@ -2,59 +2,58 @@ import React, { useContext, type ReactElement, useState, useEffect } from 'react
 import { toast } from 'react-toastify'
 import Input from '@/shared/ui/components/Input'
 import Button from '@/shared/ui/components/Button'
-import { type CompanyDto, INITIAL_STATE_COMPANY_DTO } from '@/profiles/models/company.interface'
-import { CompaniesService } from '@/profiles/services/company.service'
-import { CompanyContext } from '../contexts/CompanyContext'
+import { type ContractorDto, CONTRACTOR_DTO_INITIAL_STATE } from '@/profiles/models/contractor.interface'
+import { ContractorsService } from '@/profiles/services/contractor.service'
+import { ContractorContext } from '../contexts/ContractorContext'
 import { useDataForm } from '@/shared/hooks/useDataForm'
 
 type FormAction = 'add' | 'update'
 
-const CompanyForm = (): ReactElement => {
-  const { companyForm, setCompanyForm, addCompany, updateCompany, toastId } = useContext(CompanyContext)
+const ContractorForm = (): ReactElement => {
+  const { contractorForm, setContractorForm, addContractor, updateContractor, toastId } = useContext(ContractorContext)
 
-  const [company, setCompanyValue, setCompany] = useDataForm<CompanyDto>(INITIAL_STATE_COMPANY_DTO)
+  const [contractor, setContractorValue, setContractor] = useDataForm<ContractorDto>(CONTRACTOR_DTO_INITIAL_STATE)
   const [formAction, setFormAction] = useState<FormAction>('add')
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   useEffect(() => {
-    if (companyForm === null) {
+    if (contractorForm === null) {
       setFormAction('add')
       return
     }
 
-    const { name, ruc } = companyForm
+    const { name } = contractorForm
     setFormAction('update')
 
-    setCompany({
-      name,
-      ruc
+    setContractor({
+      name
     })
-  }, [companyForm])
+  }, [contractorForm])
 
   const handleCancel = (): void => {
-    setCompanyForm(null)
-    setCompany(INITIAL_STATE_COMPANY_DTO)
+    setContractorForm(null)
+    setContractor(CONTRACTOR_DTO_INITIAL_STATE)
   }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault()
     setIsSubmitting(true)
-    const companiesService = new CompaniesService()
-    const submitAction = formAction === 'add' ? companiesService.create : companiesService.update
-    const onFinishAction = formAction === 'add' ? addCompany : updateCompany
-    const id = companyForm?.id ?? ''
+    const contractorsService = new ContractorsService()
+    const submitAction = formAction === 'add' ? contractorsService.create : contractorsService.update
+    const onFinishAction = formAction === 'add' ? addContractor : updateContractor
+    const id = contractorForm?.id ?? ''
 
-    void submitAction(company, id)
+    void submitAction(contractor, id)
       .then((response) => {
-        setCompanyForm(null)
-        setCompany(INITIAL_STATE_COMPANY_DTO)
+        setContractorForm(null)
+        setContractor(CONTRACTOR_DTO_INITIAL_STATE)
         onFinishAction(response)
         toast(`Empresa ${formAction === 'add' ? 'añadido' : 'actualizado'} correctamente`, { toastId, type: 'success' })
       })
       .catch(error => {
         console.log(error)
-        const { message } = error.company
+        const { message } = error.contractor
         const errorMessage = typeof message === 'object' ? message.join(' ') : message
         toast(errorMessage, { toastId, type: 'error' })
       })
@@ -71,23 +70,14 @@ const CompanyForm = (): ReactElement => {
             label='Nombre'
             name='name'
             placeholder='Ingresa nombre'
-            value={company.name}
-            setValue={setCompanyValue}
-            type='text'
-          />
-
-          <Input
-          label='RUC'
-            name='ruc'
-            placeholder='Ingresa el ruc'
-            value={company.ruc}
-            setValue={setCompanyValue}
+            value={contractor.name}
+            setValue={setContractorValue}
             type='text'
           />
 
         <div className='mt-3 flex gap-3 justify-end'>
           <Button color='primary' type='submit' isLoading={isSubmitting}>{formAction === 'add' ? 'Añadir' : 'Editar'}</Button>
-          {company !== INITIAL_STATE_COMPANY_DTO && <Button color='secondary' onClick={handleCancel}>Cancelar</Button>}
+          {contractor !== CONTRACTOR_DTO_INITIAL_STATE && <Button color='secondary' onClick={handleCancel}>Cancelar</Button>}
         </div>
       </form>
     </div>
@@ -95,4 +85,4 @@ const CompanyForm = (): ReactElement => {
   )
 }
 
-export default CompanyForm
+export default ContractorForm

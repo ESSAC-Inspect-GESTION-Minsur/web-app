@@ -1,8 +1,8 @@
 import { type Vehicle } from '@/vehicles/models/vehicle.interface'
-import { type User } from '@/users/models/user.interface'
 import { type Company } from '@/profiles/models/company.interface'
+import { type Profile } from '@/profiles/models/profile.interface'
 
 export interface ExcelResponse {
-  data: User[] | Vehicle[] | Company[]
+  data: Profile[] | Vehicle[] | Company[]
   dataMissed: string[]
 }

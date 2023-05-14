@@ -1,23 +1,24 @@
-import React, { useContext, type ReactElement, useMemo } from 'react'
+import React, { useContext, type ReactElement } from 'react'
 import { toast } from 'react-toastify'
 import Table, { type Action, type Column } from '@/shared/ui/components/table/Table'
 import DeleteIcon from '@/shared/ui/assets/icons/DeleteIcon'
 import EditIcon from '@/shared/ui/assets/icons/EditIcon'
-import EyeIcon from '@/shared/ui/assets/icons/EyeIcon'
 import { VehiclesService } from '@/vehicles/services/vehicles.service'
 import { type Vehicle } from '@/vehicles/models/vehicle.interface'
 import { VehicleContext } from '../contexts/VehicleContext'
 import { isDate } from '@/shared/utils'
 import AdminIcon from '@/shared/ui/assets/icons/AdminIcon'
+// import EyeIcon from '@/shared/ui/assets/icons/EyeIcon'
 
 interface VehiclesTableProps {
   toggleShowForm: () => void
   toggleShowDetail: () => void
   toggleAssignCompany: () => void
+  toggleAssignContractor: () => void
   areCarts: boolean
 }
 
-const VehiclesTable = ({ areCarts, toggleShowForm, toggleShowDetail, toggleAssignCompany }: VehiclesTableProps): ReactElement => {
+const VehiclesTable = ({ areCarts, toggleShowForm, toggleShowDetail, toggleAssignCompany, toggleAssignContractor }: VehiclesTableProps): ReactElement => {
   const { toastId, vehicles, setVehicleForm, removeVehicle, setSelectedVehicle } = useContext(VehicleContext)
 
   const handleRemove = (vehicle: Vehicle): void => {
@@ -44,14 +45,19 @@ const VehiclesTable = ({ areCarts, toggleShowForm, toggleShowDetail, toggleAssig
     toggleShowForm()
   }
 
-  const handleView = (vehicle: Vehicle): void => {
-    setSelectedVehicle(vehicle)
-    toggleShowDetail()
-  }
+  // const handleView = (vehicle: Vehicle): void => {
+  //   setSelectedVehicle(vehicle)
+  //   toggleShowDetail()
+  // }
 
   const assignCompany = (vehicle: Vehicle): void => {
     setSelectedVehicle(vehicle)
     toggleAssignCompany()
+  }
+
+  const assignContractor = (vehicle: Vehicle): void => {
+    setSelectedVehicle(vehicle)
+    toggleAssignContractor()
   }
 
   const VEHICLE_COLUMNS: Array<Column<Vehicle>> = [
@@ -63,59 +69,55 @@ const VehiclesTable = ({ areCarts, toggleShowForm, toggleShowDetail, toggleAssig
       render: (vehicle) => vehicle.licensePlate
     },
     {
-      id: 'provider',
-      columnName: 'Proveedor',
-      filterFunc: (vehicle) => vehicle.provider ?? 'No registrado',
-      sortFunc: (a, b) => {
-        const providerA = a.provider ?? 'no registrado'
-        const providerB = b.provider ?? 'no registrado'
-        return providerA > providerB ? 1 : -1
-      },
-      render: (vehicle) => vehicle.provider ?? 'No registrado'
-    },
-    {
-      id: 'company',
-      columnName: 'Empresa',
-      filterFunc: (vehicle) => vehicle.company,
-      sortFunc: (a, b) => a.company > b.company ? 1 : -1,
-      render: (vehicle) => vehicle.company
-    },
-    {
-      id: 'imei',
-      columnName: 'Imei',
-      filterFunc: (vehicle) => vehicle.imei ?? 'No registrado',
-      sortFunc: (a, b) => {
-        const imeiA = a.imei ?? 'No registrado'
-        const imeiB = b.imei ?? 'No registrado'
-        return imeiA > imeiB ? 1 : -1
-      },
-      render: (vehicle) => vehicle.imei ?? 'No registrado'
-    },
-    {
-      id: 'lastMaintenance',
-      columnName: 'Último Mantenimiento',
-      filterFunc: (vehicle) => {
-        if (!vehicle.lastMaintenance) {
-          return 'No registrado'
-        }
-        return isDate(vehicle.lastMaintenance) ? new Date(vehicle.lastMaintenance).toDateString() : 'No registrado'
-      },
-      sortFunc: (a, b) => {
-        const aLastMaintenance = a.lastMaintenance ?? 'No registrado'
-        const bLastMaintenance = b.lastMaintenance ?? 'No registrado'
-
-        if (isNaN(Date.parse(aLastMaintenance)) && isNaN(Date.parse(bLastMaintenance))) {
-          return aLastMaintenance > bLastMaintenance ? 1 : -1
-        }
-
-        return new Date(aLastMaintenance).getTime() - new Date(bLastMaintenance).getTime()
-      },
+      id: 'companies',
+      columnName: 'Empresas del transportista',
+      filterFunc: (vehicle) => vehicle.companies.map(company => company.name).join(' '),
       render: (vehicle) => {
-        if (vehicle.lastMaintenance === null || !isDate(vehicle.lastMaintenance)) {
-          return 'No registrado'
+        const companies = vehicle.companies
+
+        if (companies.length <= 0) {
+          return 'No hay empresas asignadas'
         }
 
-        return new Date(vehicle.lastMaintenance).toDateString()
+        const filteredArray = companies.filter(
+          (obj, index, self) => index === self.findIndex((o) => o.id === obj.id)
+        )
+
+        return (
+          <select className='block w-full h-10 px-2 rounded-t-md border-b border-solid border-blue-dark outline-none capitalize'>
+            {
+              ...filteredArray.map((company) => (
+                <option key={company.id}>{company.name}</option>
+              ))
+            }
+          </select>
+        )
+      }
+    },
+    {
+      id: 'contractors',
+      columnName: 'Empresas contratantes',
+      filterFunc: (vehicle) => vehicle.contractors.map(company => company.name).join(' '),
+      render: (vehicle) => {
+        const contractors = vehicle.contractors
+
+        if (contractors.length <= 0) {
+          return 'No hay empresas contratantes asignadas'
+        }
+
+        const filteredArray = contractors.filter(
+          (obj, index, self) => index === self.findIndex((o) => o.id === obj.id)
+        )
+
+        return (
+          <select className='block w-full h-10 px-2 rounded-t-md border-b border-solid border-blue-dark outline-none capitalize'>
+            {
+              ...filteredArray.map((company) => (
+                <option key={company.id}>{company.name}</option>
+              ))
+            }
+          </select>
+        )
       }
     },
     {
@@ -205,32 +207,28 @@ const VehiclesTable = ({ areCarts, toggleShowForm, toggleShowDetail, toggleAssig
 
   const PAGINATION = [5, 10, 20]
 
-  const VEHICLE_ACTIONS: Array<Action<Vehicle>> = useMemo(() => {
-    const actions = [
-      {
-        icon: () => (<EditIcon className='cursor-pointer w-5 h-5' />),
-        actionFunc: handleUpdate
-      },
-      {
-        icon: () => (<DeleteIcon className='cursor-pointer w-5 h-5 text-red' />),
-        actionFunc: handleRemove
-      },
-      {
-        icon: () => (<EyeIcon className='cursor-pointer w-5 h-5 ' />),
-        actionFunc: handleView
-      }
-    ]
-
-    if (!areCarts) {
-      actions.push(
-        {
-          icon: () => (<AdminIcon className='cursor-pointer w-5 h-5 ' />),
-          actionFunc: assignCompany
-        })
+  const VEHICLE_ACTIONS: Array<Action<Vehicle>> = [
+    {
+      icon: () => (<EditIcon className='cursor-pointer w-5 h-5' />),
+      actionFunc: handleUpdate
+    },
+    {
+      icon: () => (<DeleteIcon className='cursor-pointer w-5 h-5 text-red' />),
+      actionFunc: handleRemove
+    },
+    // {
+    //   icon: () => (<EyeIcon className='cursor-pointer w-5 h-5 ' />),
+    //   actionFunc: handleView
+    // },
+    {
+      icon: () => (<AdminIcon className='cursor-pointer w-5 h-5 text-blue' />),
+      actionFunc: assignCompany
+    },
+    {
+      icon: () => (<AdminIcon className='cursor-pointer w-5 h-5 ' />),
+      actionFunc: assignContractor
     }
-
-    return actions
-  }, [areCarts])
+  ]
 
   return (
     <main>

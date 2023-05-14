@@ -24,18 +24,9 @@ const Filter = ({ columns }: FilterProps): ReactElement => {
 
   return (
     <Fragment>
-      <div className='flex items-end gap-5 my-5'>
-        <div className='grid grid-cols-filter w-3/4'>
-          <p className='font-medium uppercase'>Columna a filtrar</p>
-          <input
-            type="text"
-            value={filterValue}
-            className='block w-full h-10 px-2 border-b border-solid border-blue-dark outline-none'
-            placeholder='Ingresa el valor a filtrar'
-            onChange={onInputChange}
-          />
-        </div>
+      <div className='flex items-end gap-5 mb-5'>
         <div className='w-1/4'>
+          <p className='font-medium uppercase'>Columna a filtrar</p>
           <select
             value={filterColumn?.id}
             onChange={onSelectChange}
@@ -47,6 +38,15 @@ const Filter = ({ columns }: FilterProps): ReactElement => {
               ))
             }
           </select>
+        </div>
+        <div className='grid grid-cols-filter w-3/4'>
+          <input
+            type="text"
+            value={filterValue}
+            className='block w-full h-10 px-2 border-b border-solid border-blue-dark outline-none'
+            placeholder='Ingresa el valor a filtrar'
+            onChange={onInputChange}
+          />
         </div>
       </div>
     </Fragment>

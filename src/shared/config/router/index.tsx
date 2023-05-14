@@ -2,6 +2,8 @@ import LoginView from '@/auth/ui/pages/LoginView'
 import CheckpointsView from '@/checkpoints/ui/pages/CheckpointsView'
 import FieldsView from '@/fields/ui/pages/FieldsView'
 import CompaniesView from '@/profiles/ui/pages/CompaniesView'
+import ContractorsView from '@/profiles/ui/pages/ContractorsView'
+import DriversView from '@/profiles/ui/pages/DriversView'
 import ProfileView from '@/profiles/ui/pages/ProfileView'
 import ReportTypeGroupView from '@/reports/ui/pages/ReportTypeGroupView'
 import ReportTypesView from '@/reports/ui/pages/ReportTypesView'
@@ -14,6 +16,7 @@ import ErrorPage from '@/shared/ui/pages/ErrorPage'
 import Home from '@/shared/ui/pages/Home'
 import NotFound from '@/shared/ui/pages/NotFound'
 import TermsAndConditions from '@/shared/ui/pages/TermsAndConditions'
+import ProjectsView from '@/users/ui/pages/ProjectsView'
 import UsersView from '@/users/ui/pages/UsersView'
 import MaterialsView from '@/vehicles/ui/pages/MaterialsView'
 import VehicleTypesView from '@/vehicles/ui/pages/VehicleTypesView'
@@ -82,6 +85,18 @@ const authRequiredRoutes: RouteObject[] = [
       {
         path: 'empresas',
         element: <CompaniesView />
+      },
+      {
+        path: 'conductores',
+        element: <DriversView />
+      },
+      {
+        path: 'proyectos',
+        element: <ProjectsView />
+      },
+      {
+        path: 'contratantes',
+        element: <ContractorsView />
       }
     ]
   },

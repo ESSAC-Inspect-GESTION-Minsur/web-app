@@ -5,14 +5,15 @@ import Input from '@/shared/ui/components/Input'
 import { useDataForm } from '@/shared/hooks/useDataForm'
 import { type FormAction } from '@/shared/types'
 import { useBooleanState } from '@/shared/hooks/useBooleanState'
-import { type ReportTypeDto, REPORT_TYPE_DTO_INITIAL_STATE } from '@/reports/models/report-type.interface'
-import { ReportTypesService } from '@/reports/services/report-types.service'
-import { ReportTypeContext } from '../contexts/ReportTypeContext'
+import { ProjectContext } from '../../contexts/ProjectContext'
+import { type ProjectDto } from '@/users/models/project.interface'
+import { REPORT_TYPE_DTO_INITIAL_STATE } from '@/reports/models/report-type.interface'
+import { ProjectsService } from '@/users/services/project.service'
 
-const ReportTypeForm = (): ReactElement => {
-  const { toastId, reportTypeForm, setReportTypeForm, addReportType, updateReportType } = useContext(ReportTypeContext)
+const ProjectForm = (): ReactElement => {
+  const { toastId, projectForm, setProjectForm, addProject, updateProject } = useContext(ProjectContext)
 
-  const [reportType, setReportTypeValue, setReportType, reset] = useDataForm<ReportTypeDto>(REPORT_TYPE_DTO_INITIAL_STATE)
+  const [project, setProjectValue, setProject, reset] = useDataForm<ProjectDto>(REPORT_TYPE_DTO_INITIAL_STATE)
 
   const [formAction, setFormAction] = useState<FormAction>('add')
 
@@ -20,41 +21,41 @@ const ReportTypeForm = (): ReactElement => {
 
   useEffect(() => {
     setIsSubmitting(false)
-    if (reportTypeForm === null) {
+    if (projectForm === null) {
       setFormAction('add')
       reset()
       return
     }
 
-    const { name } = reportTypeForm
+    const { name } = projectForm
     setFormAction('update')
 
-    setReportType({
+    setProject({
       name
     })
-  }, [reportTypeForm])
+  }, [projectForm])
 
   const handleCancel = (): void => {
-    setReportTypeForm(null)
+    setProjectForm(null)
     reset()
   }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault()
     toggleIsSubmitting()
-    const reportTypesService = new ReportTypesService()
+    const projectsService = new ProjectsService()
 
-    const submitAction = formAction === 'add' ? reportTypesService.create : reportTypesService.update
-    const onSuccess = formAction === 'add' ? addReportType : updateReportType
-    const id = reportTypeForm?.id ?? ''
+    const submitAction = formAction === 'add' ? projectsService.create : projectsService.update
+    const onSuccess = formAction === 'add' ? addProject : updateProject
+    const id = projectForm?.id ?? ''
 
-    void submitAction(reportType, id)
+    void submitAction(project, id)
       .then((response) => {
-        setReportTypeForm(null)
+        setProjectForm(null)
         onSuccess(response)
         reset()
 
-        toast(`Sponsor ${formAction === 'add' ? 'añadida' : 'guardada'} correctamente`, { toastId, type: 'success' })
+        toast(`Proyecto ${formAction === 'add' ? 'añadido' : 'guardado'} correctamente`, { toastId, type: 'success' })
       })
       .catch(error => {
         const { message } = error.data
@@ -67,13 +68,13 @@ const ReportTypeForm = (): ReactElement => {
 
   return (
     <div>
-      <h2 className='font-bold uppercase'>{formAction === 'add' ? 'Añadir' : 'Editar'} Tipo de checklist</h2>
+      <h2 className='font-bold uppercase'>{formAction === 'add' ? 'Añadir' : 'Editar'} Proyectos</h2>
       <form onSubmit={handleSubmit}>
         <Input
           label='Nombre'
-          value={reportType.name}
+          value={project.name}
           name='name' placeholder='Nombre checklist' type='text'
-          setValue={setReportTypeValue}></Input>
+          setValue={setProjectValue}></Input>
 
         <div className='mt-3 flex items-center gap-3'>
           <Button className='py-1' color='primary' type='submit' isLoading={isSubmitting}>{formAction === 'add' ? 'Añadir' : 'Guardar'}</Button>
@@ -84,4 +85,4 @@ const ReportTypeForm = (): ReactElement => {
   )
 }
 
-export default ReportTypeForm
+export default ProjectForm

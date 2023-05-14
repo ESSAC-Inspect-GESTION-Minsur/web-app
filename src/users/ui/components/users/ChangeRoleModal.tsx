@@ -2,30 +2,31 @@ import React, { type ReactElement, useContext, useEffect } from 'react'
 import { toast } from 'react-toastify'
 import Button from '@/shared/ui/components/Button'
 import { UserRole } from '@/users/models/enum/role.enum'
-import { UserContext } from '../contexts/UserContext'
+import { UserContext } from '../../contexts/UserContext'
 import { UsersService } from '@/users/services/user.service'
 import { useDataForm } from '@/shared/hooks/useDataForm'
 import { USER_CHANGE_ROLE_INITIAL_STATE, type UserChangeRole } from '@/users/models/user.interface'
+import Modal from '@/shared/ui/components/Modal'
 
 interface ChangeRoleModalProps {
+  isOpen: boolean
   onClose: () => void
 }
 
-const ChangeRole = ({ onClose }: ChangeRoleModalProps): ReactElement => {
+const ChangeRoleModal = ({ isOpen, onClose }: ChangeRoleModalProps): ReactElement => {
   const { toastId, selectedUser, updateUser, setSelectedUser } = useContext(UserContext)
 
   const [user, setUserValue, setUser] = useDataForm<UserChangeRole>(USER_CHANGE_ROLE_INITIAL_STATE)
 
   useEffect(() => {
     if (selectedUser === null) return
-
     const { id, role } = selectedUser
 
     setUser({
       id,
       role
     })
-  }, [])
+  }, [selectedUser])
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault()
@@ -59,7 +60,7 @@ const ChangeRole = ({ onClose }: ChangeRoleModalProps): ReactElement => {
   }
 
   return (
-    <div className='p-6'>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <div className='mb-4'>
         <p className='text-center uppercase text-xl'><span className='font-bold'>Usuario seleccionado:</span> {selectedUser?.username}</p>
         <p className='text-center uppercase text-red'><span className='font-bold'>Rol:</span> {user?.role}</p>
@@ -77,8 +78,8 @@ const ChangeRole = ({ onClose }: ChangeRoleModalProps): ReactElement => {
           <Button color='primary' type='submit'>Cambiar</Button>
         </div>
       </form>
-    </div >
+    </Modal >
   )
 }
 
-export default ChangeRole
+export default ChangeRoleModal

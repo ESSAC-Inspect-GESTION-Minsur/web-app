@@ -12,6 +12,7 @@ import VehicleFormModal from '../components/VehicleFormModal'
 import ImportModal from '@/admin/ui/components/ImportModal'
 import VehicleDetailModal from '../components/VehicleDetailModal'
 import AssignCompany from '../components/AssignCompany'
+import AssignContractor from '../components/AssignContractor'
 
 interface VehicleViewProps {
   areCarts: boolean
@@ -30,6 +31,7 @@ const VehiclesView = ({ areCarts }: VehicleViewProps): ReactElement => {
   const [showDetailModal, toggleShowDetailModal] = useBooleanState()
   const [isImportAssignCompanyModalShown, toggleShowImportAssignCompanyModal] = useBooleanState()
   const [showAssignCompanyModal, toggleShowAssignCompanyModal] = useBooleanState()
+  const [showAssignContractorModal, toggleShowAssignContractorModal] = useBooleanState()
 
   const [importType, setImportType] = useState<'vehicle' | 'cart'>('vehicle')
 
@@ -73,18 +75,25 @@ const VehiclesView = ({ areCarts }: VehicleViewProps): ReactElement => {
         <h1 className='text-blue-era uppercase text-2xl font-semibold'>{ !areCarts ? 'Vehículos' : 'Semirremolques' }</h1>
         <div className='flex gap-2'>
           <Button color='secondary' onClick={toggleShowImportModal}>Importar Excel</Button>
-          { !areCarts && <Button color='secondary' onClick={toggleShowImportAssignCompanyModal}>Assignar Empresas Excel</Button>}
+          { !areCarts && <Button color='secondary' onClick={toggleShowImportAssignCompanyModal}>Asignar Empresas Excel</Button>}
           <Button color='primary' onClick={toggleShowForm}>Agregar { !areCarts ? 'Vehículo' : 'Semirremolque' }</Button>
         </div>
       </section>
       <Divider></Divider>
 
-      <VehiclesTable toggleShowForm={toggleShowForm} areCarts={areCarts} toggleShowDetail={toggleShowDetailModal} toggleAssignCompany={toggleShowAssignCompanyModal}/>
+      <VehiclesTable
+        toggleShowForm={toggleShowForm}
+        areCarts={areCarts}
+        toggleShowDetail={toggleShowDetailModal}
+        toggleAssignCompany={toggleShowAssignCompanyModal}
+        toggleAssignContractor={toggleShowAssignContractorModal}
+      />
 
       <VehicleFormModal isOpen={showForm} onClose={toggleShowForm} isCart={areCarts}/>
       <ImportModal isOpen={showImportModal} onClose={toggleShowImportModal} onSuccess={onImportSuccess} toastId={TOAST_ID} type={importType}/>
       <VehicleDetailModal isOpen={showDetailModal} onClose={toggleShowDetailModal}/>
       <AssignCompany isOpen={showAssignCompanyModal} onClose={toggleShowAssignCompanyModal}/>
+      <AssignContractor isOpen={showAssignContractorModal} onClose={toggleShowAssignContractorModal}/>
       { !areCarts && <ImportModal isOpen={isImportAssignCompanyModalShown} onClose={toggleShowImportAssignCompanyModal} onSuccess={refreshImportedVehiclesWithCompany} toastId={TOAST_ID} type='assign-vehicle-company' />}
 
       <Toast id={TOAST_ID} />

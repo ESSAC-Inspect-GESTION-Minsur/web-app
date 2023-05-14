@@ -5,14 +5,14 @@ export interface Profile {
   name: string
   lastName: string
   dni: string
-  company: string
-  phone1: string
-  phone2: string
-  email: string
-  license: string
-  licenseCategory: string
-  licenseExpiration: string
+  phone1: string | null
+  phone2: string | null
+  email: string | null
+  license: string | null
+  licenseCategory: string | null
+  licenseExpiration: string | null
   fullName: string
+  isDriver: boolean
   companies: Company[]
 
   createdAt: string
@@ -26,7 +26,6 @@ export const PROFILE_INITIAL_STATE: Profile = {
   id: '',
   name: '',
   lastName: '',
-  company: '',
   dni: '',
   phone1: '',
   phone2: '',
@@ -34,6 +33,7 @@ export const PROFILE_INITIAL_STATE: Profile = {
   license: '',
   licenseCategory: '',
   licenseExpiration: new Date().toISOString(),
+  isDriver: false,
   fullName: '',
   companies: [],
   createdAt: '',
@@ -46,10 +46,10 @@ export const PROFILE_DTO_INITIAL_STATE: ProfileDto = {
   lastName: '',
   dni: '',
   phone1: '',
-  company: '',
   phone2: '',
   email: '',
   license: '',
   licenseCategory: '',
+  isDriver: false,
   licenseExpiration: new Date().toISOString()
 }

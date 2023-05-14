@@ -91,7 +91,7 @@ const AssignMaterial = ({ isOpen, actualMaterials, update, onClose }: AssignMate
         <p className='text-center mb-3 text-lg'>Todos los tipos de materiales están asignados, crea algún tipo de material si deseas asignar más</p>
 
         <div className='flex justify-center gap-3 items-center'>
-          <Button color='primary' onClick={() => { navigate('/admin/materials') }}>Añadir tipo de material</Button>
+          <Button color='primary' onClick={() => { navigate('/admin/tipo-materiales') }}>Añadir tipo de material</Button>
         </div>
       </div>
     )

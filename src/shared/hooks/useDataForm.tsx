@@ -8,6 +8,10 @@ export const useDataForm = <T,>(initialState: T): [
 ] => {
   const [data, setData] = useState<T>(initialState)
 
+  const handleSetData = (data: T): void => {
+    setData(data)
+  }
+
   const setDataValue = (name: string, value: string | boolean | number): void => {
     // console.log(data)
     // console.log({ name, value })
@@ -21,7 +25,7 @@ export const useDataForm = <T,>(initialState: T): [
   return [
     data,
     setDataValue,
-    setData,
+    handleSetData,
     resetData
   ]
 }

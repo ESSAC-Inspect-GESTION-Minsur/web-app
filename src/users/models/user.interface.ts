@@ -1,5 +1,5 @@
-import { PROFILE_INITIAL_STATE, type Profile } from '@/profiles/models/profile.interface'
-import { type Area } from './area.interface'
+import { PROFILE_INITIAL_STATE, type ProfileDto, type Profile, PROFILE_DTO_INITIAL_STATE } from '@/profiles/models/profile.interface'
+import { type Sponsor } from './sponsor.interface'
 import { UserRole } from './enum/role.enum'
 
 export interface User {
@@ -7,7 +7,7 @@ export interface User {
   username: string
   company: string
   role: UserRole
-  areas: Area[]
+  sponsors: Sponsor[]
   profile: Profile
 
   createdAt: string
@@ -17,7 +17,9 @@ export interface User {
 
 export interface UserDto extends Pick<User, 'username' | 'company' | 'role'> {
   password: string
-  areaId: string
+  sponsorId: string
+
+  profile: ProfileDto
 }
 
 export interface UserLogin extends Pick<User, 'username'> {
@@ -33,7 +35,7 @@ export const USER_INITIAL_STATE: User = {
   username: '',
   company: '',
   role: UserRole.USER,
-  areas: [],
+  sponsors: [],
   profile: PROFILE_INITIAL_STATE,
   createdAt: '',
   updatedAt: '',
@@ -45,7 +47,8 @@ export const USER_DTO_INITIAL_STATE: UserDto = {
   password: '',
   company: '',
   role: UserRole.USER,
-  areaId: ''
+  sponsorId: '',
+  profile: PROFILE_DTO_INITIAL_STATE
 }
 
 export const USER_LOGIN_INITIAL_STATE: UserLogin = {

@@ -43,28 +43,26 @@ const VehicleFormModal = ({ isOpen, isCart, onClose }: VehicleFormModalProps): R
   }, [isCart])
 
   useEffect(() => {
+    if (!isOpen) return
+
     if (vehicleForm === null) {
       setFormAction('add')
       reset()
       return
     }
 
-    const { licensePlate, brand, company, imei, lastMaintenance, model, provider, soatExpiration, technicalReviewExpiration } = vehicleForm
+    const { licensePlate, brand, model, soatExpiration, technicalReviewExpiration } = vehicleForm
     setFormAction('update')
 
     setVehicle({
       licensePlate,
       vehicleTypeId: '',
       brand,
-      company,
-      imei,
-      lastMaintenance,
       model,
-      provider,
       soatExpiration,
       technicalReviewExpiration
     })
-  }, [vehicleForm])
+  }, [vehicleForm, isOpen])
 
   useEffect(() => {
     if (vehicleTypes.length === 0) return
@@ -86,9 +84,6 @@ const VehicleFormModal = ({ isOpen, isCart, onClose }: VehicleFormModalProps): R
     const submitAction = formAction === 'add' ? vehiclesService.create : vehiclesService.update
     const onSuccess = formAction === 'add' ? addVehicle : updateVehicle
     const id = formAction === 'add' ? vehicle.vehicleTypeId : vehicle.licensePlate
-
-    vehicle.provider = vehicle.provider === '' ? null : vehicle.provider
-    vehicle.imei = vehicle.imei === '' ? null : vehicle.imei
 
     void submitAction(vehicle, id)
       .then((vehicle) => {
@@ -121,7 +116,7 @@ const VehicleFormModal = ({ isOpen, isCart, onClose }: VehicleFormModalProps): R
             )
           : (
             <div className='p-3'>
-              <h2 className='uppercase text-lg font-semibold text-center mb-2'>Agregar un {!isCart ? 'vehiculo' : 'semirremolque'}</h2>
+              <h2 className='uppercase text-lg font-semibold text-center mb-2'>{formAction === 'add' ? 'Añadir' : 'Editar'} {!isCart ? 'vehiculo' : 'semirremolque'}</h2>
               <Divider className='mt-0'></Divider>
               <form onSubmit={handleSubmit}>
 
@@ -141,59 +136,33 @@ const VehicleFormModal = ({ isOpen, isCart, onClose }: VehicleFormModalProps): R
                   value={vehicle.licensePlate}
                   name='licensePlate' placeholder='Placa' type='text'
                   disabled={formAction === 'update'}
-                  setValue={setVehicleValue}></Input>
+                  setValue={setVehicleValue}
+                ></Input>
 
-                { vehicle.provider !== null && <Input
-                  label='Proveedor'
-                  value={vehicle.provider}
-                  name='provider' placeholder='Proveedor' type='text'
-                  required={false}
-                  setValue={setVehicleValue}></Input>}
-
-                <Input
-                  label='Empresa'
-                  value={vehicle.company}
-                  name='company' placeholder='Empresa' type='text'
-                  setValue={setVehicleValue}></Input>
-
-                { vehicle.imei !== null && <Input
-                  label='Imei'
-                  value={vehicle.imei}
-                  name='imei' placeholder='Imei' type='text'
-                  required={false}
-                  setValue={setVehicleValue}></Input>}
-
-                { vehicle.model !== null && <Input
-                  label='Modelo'
-                  value={vehicle.model}
-                  name='model' placeholder='Modelo' type='text'
-                  setValue={setVehicleValue}></Input>}
-
-                { vehicle.brand !== null && <Input
+                {vehicle.brand !== null && <Input
                   label='Marca'
                   value={vehicle.brand}
                   name='brand' placeholder='Marca' type='text'
                   setValue={setVehicleValue}></Input>}
 
-                { vehicle.soatExpiration !== null && <Input
+                {vehicle.model !== null && <Input
+                  label='Modelo'
+                  value={vehicle.model}
+                  name='model' placeholder='Modelo' type='text'
+                  setValue={setVehicleValue}></Input>}
+
+                {vehicle.soatExpiration !== null && <Input
                   label='Fecha Vencimiento Soat'
                   value={new Date(vehicle.soatExpiration).toISOString().substring(0, 10)}
                   required={false}
                   name='soatExpiration' placeholder='' type='date'
                   setValue={setVehicleValue}></Input>}
 
-                { vehicle.technicalReviewExpiration !== null && <Input
+                {vehicle.technicalReviewExpiration !== null && <Input
                   label='Fecha Vencimiento Revisión Técnica'
                   value={new Date(vehicle.technicalReviewExpiration).toISOString().substring(0, 10)}
                   required={false}
                   name='technicalReviewExpiration' placeholder='' type='date'
-                  setValue={setVehicleValue}></Input>}
-
-                { vehicle.lastMaintenance !== null && <Input
-                  label='Último Mantenimiento'
-                  value={new Date(vehicle.lastMaintenance).toISOString().substring(0, 10)}
-                  required={false}
-                  name='lastMaintenance' placeholder='' type='date'
                   setValue={setVehicleValue}></Input>}
 
                 <div className='mt-4 flex justify-center gap-3 items-center'>

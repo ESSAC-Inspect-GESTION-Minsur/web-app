@@ -11,6 +11,11 @@ export class ProfilesService extends AppServices {
       .then(response => response.data)
   }
 
+  create = async (profile: ProfileDto, userId: string): Promise<Profile> => {
+    return await this.post<Profile>(`?userId=${userId}`, profile)
+      .then(response => response.data)
+  }
+
   findById = async (id: string): Promise<Profile> => {
     return await this.get<Profile>(`/id/${id}`)
       .then(response => response.data)
@@ -28,6 +33,11 @@ export class ProfilesService extends AppServices {
 
   removeCompany = async (id: string, companyId: string): Promise<Profile> => {
     return await this.patch<Profile>(`/${id}/remove-company/${companyId}`)
+      .then(response => response.data)
+  }
+
+  toggleActive = async (id: string): Promise<Profile> => {
+    return await this.patch<Profile>(`/${id}/toggle-active`)
       .then(response => response.data)
   }
 }

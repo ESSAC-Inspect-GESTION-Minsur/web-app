@@ -6,7 +6,7 @@ import Modal from '@/shared/ui/components/Modal'
 import Divider from '@/shared/ui/components/Divider'
 import Button from '@/shared/ui/components/Button'
 
-type ImportObject = 'user' | 'vehicle' | 'company' | 'assign-user-company' | 'assign-vehicle-company' | 'cart'
+type ImportObject = 'profile' | 'vehicle' | 'company' | 'assign-driver-company' | 'assign-vehicle-company' | 'cart'
 
 interface ImportExcelProps {
   isOpen: boolean
@@ -34,11 +34,11 @@ const ImportExcel = ({ isOpen, onClose, onSuccess, toastId, type }: ImportExcelP
 
   const getTitle = (): string => {
     const titles = {
-      user: 'Usuarios',
+      profile: 'Conductores',
       vehicle: 'Vehículos',
       company: 'Empresas',
       cart: 'Semirremolques',
-      'assign-user-company': 'Asignar usuarios a empresas',
+      'assign-driver-company': 'Asignar conductores a empresas',
       'assign-vehicle-company': 'Asignar vehículos a empresas'
     }
 
@@ -59,11 +59,11 @@ const ImportExcel = ({ isOpen, onClose, onSuccess, toastId, type }: ImportExcelP
     formData.append('excel-file', file)
 
     const importFunctions = {
-      user: adminService.importUserExcel,
+      profile: adminService.importDriverExcel,
       vehicle: adminService.importVehicleExcel,
       company: adminService.importCompanyExcel,
       cart: adminService.importCartExcel,
-      'assign-user-company': adminService.importAssignUserCompanyExcel,
+      'assign-driver-company': adminService.importAssignUserCompanyExcel,
       'assign-vehicle-company': adminService.importAssignVehicleCompanyExcel
     }
     const importExcelFunction = importFunctions[type]

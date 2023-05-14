@@ -90,7 +90,6 @@ const Table = ({ data, columns, pagination, showFilter = true, actions, onRowCli
   }, [data, filterValue, filterColumn, sortColumn, sortDirection, page, pageSize])
 
   return (
-
     <div className='mb-6'>
       <TableContext.Provider value={{ filterValue, setFilterValue, filterColumn, setFilterColumn, sortColumn, setSortColumn, sortDirection, setSortDirection, pageCount, page, setPage, pageSize, setPageSize }}>
         {showFilter && <Filter columns={columns} />}

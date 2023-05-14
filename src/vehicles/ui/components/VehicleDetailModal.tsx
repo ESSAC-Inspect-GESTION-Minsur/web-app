@@ -46,27 +46,6 @@ const VehicleDetailModal = ({ isOpen, onClose }: UpdateVehicleFormProps): ReactE
 
         <Divider className='my-[6px]'></Divider>
 
-        {vehicle.provider && (
-          <div className='flex gap-3'>
-            <p className='font-semibold'>Proveedor:</p>
-            <p>{vehicle.provider}</p>
-          </div>
-        )}
-
-        {vehicle.company && (
-          <div className='flex gap-3'>
-            <p className='font-semibold'>Empresa:</p>
-            <p>{vehicle.company}</p>
-          </div>
-        )}
-
-        {vehicle.imei && (
-          <div className='flex gap-3'>
-            <p className='font-semibold'>Imei:</p>
-            <p>{vehicle.imei}</p>
-          </div>
-        )}
-
         {vehicle.model && (
           <div className='flex gap-3'>
             <p className='font-semibold'>Modelo:</p>
@@ -95,16 +74,9 @@ const VehicleDetailModal = ({ isOpen, onClose }: UpdateVehicleFormProps): ReactE
           </div>
         )}
 
-        {vehicle.lastMaintenance && (
-          <div className='flex gap-3'>
-            <p className='font-semibold'>Fecha Último Mantenimiento:</p>
-            <p>{new Date(vehicle.lastMaintenance).toISOString().substring(0, 10)}</p>
-          </div>
-        )}
-
         <Divider className='my-[6px]'></Divider>
 
-        <h3 className='font-bold text-xl'>Empresas</h3>
+        <h3 className='font-bold uppercase'>Empresas</h3>
         <div>
           {
             vehicle.companies.length > 0
@@ -114,6 +86,21 @@ const VehicleDetailModal = ({ isOpen, onClose }: UpdateVehicleFormProps): ReactE
                   <p>{company.name}</p>
                 </div>))
               : <p>No tiene empresas asignadas</p>
+          }
+        </div>
+
+        <Divider className='my-[6px]'></Divider>
+
+        <h3 className='font-bold uppercase'>Empresas Contratantes</h3>
+        <div>
+          {
+            vehicle.contractors.length > 0
+              ? vehicle.contractors.map((company, index) => (
+                <div key={company.id} className='flex gap-2'>
+                  <p className='font-semibold'>Contratante {index + 1}: </p>
+                  <p>{company.name}</p>
+                </div>))
+              : <p>No tiene empresas contratantes asignadas</p>
           }
         </div>
 

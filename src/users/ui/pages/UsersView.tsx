@@ -1,4 +1,5 @@
 import React, { useState, type ReactElement, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import Button from '@/shared/ui/components/Button'
 import { useArrayReducer } from '@/shared/hooks/useArrayReducer'
 import { useBooleanState } from '@/shared/hooks/useBooleanState'
@@ -7,14 +8,12 @@ import { UserContext } from '../contexts/UserContext'
 import { UsersService } from '@/users/services/user.service'
 import Divider from '@/shared/ui/components/Divider'
 import Toast from '@/shared/ui/components/Toast'
-import UsersTable from '../components/UsersTable'
+import UsersTable from '../components/users/UsersTable'
 import { getCurrentUser } from '@/shared/config/store/features/auth-slice'
-import { useSelector } from 'react-redux'
-import AreasComponent from '../components/AreasComponent'
-import AddUserModal from '../components/AddUserModal'
-import ImportModal from '@/admin/ui/components/ImportModal'
-import UserDetailModal from '../components/UserDetailModal'
-import UpdateUserModal from '../components/UpdateUserModal'
+import UserDetail from '../components/users/UserDetail'
+import UserFormModal from '../components/users/UserFormModal'
+import ChangeRoleModal from '../components/users/ChangeRoleModal'
+import AssignSponsorModal from '../components/users/AssignSponsorModal'
 
 const TOAST_ID = 'users'
 
@@ -26,10 +25,8 @@ const UsersView = (): ReactElement => {
   const [userForm, setUserForm] = useState<User | null>(null)
 
   const [isFormShown, toggleShowForm] = useBooleanState()
-  const [isImportModalShown, toggleShowImportModal] = useBooleanState()
-  const [isDetailModalShown, toggleShowDetailModal] = useBooleanState()
-  const [isUpdateModalShown, toggleShowUpdateModal] = useBooleanState()
-  const [isImportAssignCompanyModalShown, toggleShowImportAssignCompanyModal] = useBooleanState()
+  const [isChangeRoleShown, toggleShowChangeRole] = useBooleanState()
+  const [isAssignSponsorShown, toggleShowAssignSponsor] = useBooleanState()
 
   useEffect(() => {
     const usersService = new UsersService()
@@ -42,17 +39,6 @@ const UsersView = (): ReactElement => {
   const handleAdd = (): void => {
     setUserForm(null)
     toggleShowForm()
-  }
-
-  const handleImportUsers = (newUsers: User[]): void => {
-    setUsers([...users, ...newUsers])
-  }
-
-  const refreshImportedUsersWithCompany = (newUsers: User[]): void => {
-    setUsers(users.map(user => {
-      const newUser = newUsers.find(newUser => newUser.id === user.id)
-      return newUser ?? user
-    }))
   }
 
   return (
@@ -71,26 +57,25 @@ const UsersView = (): ReactElement => {
       <section className='flex justify-between items-center'>
         <h1 className='uppercase text-2xl font-semibold'>Usuarios</h1>
         <div className='flex gap-2'>
-          <Button color='secondary' onClick={toggleShowImportModal}>Importar Excel</Button>
-          <Button color='secondary' onClick={toggleShowImportAssignCompanyModal}>Assignar Empresas Excel</Button>
           <Button color='primary' onClick={handleAdd}>Agregar usuario</Button>
         </div>
       </section>
       <Divider></Divider>
-      <main className='flex flex-col md:grid md:grid-cols-table md:gap-10'>
-        <div className='order-2 md:order-1 '>
-          <AreasComponent />
-        </div>
-        <div className='w-full order-1 md:order-2 mt-3 md:mt-0'>
-          <UsersTable toggleShowDetailModal={toggleShowDetailModal} toggleShowUpdateModal={toggleShowUpdateModal}/>
-        </div>
-      </main>
+      <div className='flex gap-5 items-start'>
 
-      <UserDetailModal isOpen={isDetailModalShown} onClose={toggleShowDetailModal}/>
-      <UpdateUserModal isOpen={isUpdateModalShown} onClose={toggleShowUpdateModal}/>
-      <AddUserModal isOpen={isFormShown} onClose={toggleShowForm} />
-      <ImportModal isOpen={isImportModalShown} onClose={toggleShowImportModal} onSuccess={handleImportUsers} toastId={TOAST_ID} type='user' />
-      <ImportModal isOpen={isImportAssignCompanyModalShown} onClose={toggleShowImportAssignCompanyModal} onSuccess={refreshImportedUsersWithCompany} toastId={TOAST_ID} type='assign-user-company' />
+        <main className={selectedUser !== null ? 'w-[70%]' : 'w-full'}>
+          <UsersTable toggleShowChangeRole={toggleShowChangeRole} />
+        </main>
+        {
+          selectedUser && (
+            <UserDetail toggleForm={toggleShowForm} toggleAssignSponsorModal={toggleShowAssignSponsor}/>
+          )
+        }
+      </div>
+
+      <AssignSponsorModal isOpen={isAssignSponsorShown} onClose={toggleShowAssignSponsor}/>
+      <UserFormModal isOpen={isFormShown} onClose={toggleShowForm} />
+      <ChangeRoleModal isOpen={isChangeRoleShown} onClose={toggleShowChangeRole} />
 
       <Toast id={TOAST_ID} />
     </UserContext.Provider>

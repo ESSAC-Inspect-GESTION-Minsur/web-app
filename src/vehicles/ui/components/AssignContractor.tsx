@@ -2,8 +2,8 @@ import React, { type ReactElement, useContext, useEffect, useState } from 'react
 import { toast } from 'react-toastify'
 import Button from '@/shared/ui/components/Button'
 import Modal from '@/shared/ui/components/Modal'
-import { type Company } from '@/profiles/models/company.interface'
-import { CompaniesService } from '@/profiles/services/company.service'
+import { type Contractor } from '@/profiles/models/contractor.interface'
+import { ContractorsService } from '@/profiles/services/contractor.service'
 import { VehicleContext } from '../contexts/VehicleContext'
 import { VehiclesService } from '@/vehicles/services/vehicles.service'
 
@@ -12,22 +12,22 @@ interface AddVehicleFormProps {
   onClose: () => void
 }
 
-const AssignCompany = ({ isOpen, onClose }: AddVehicleFormProps): ReactElement => {
+const AssignContractor = ({ isOpen, onClose }: AddVehicleFormProps): ReactElement => {
   const { toastId, selectedVehicle, updateVehicle, setSelectedVehicle } = useContext(VehicleContext)
-  const [selectedCompany, setSelectedCompany] = useState<string>('')
-  const [companies, setCompanies] = useState<Company[]>([])
+  const [selectedContractor, setSelectedContractor] = useState<string>('')
+  const [contractors, setContractors] = useState<Contractor[]>([])
 
   useEffect(() => {
-    const companiesService = new CompaniesService()
-    void companiesService.findAll()
+    const contractorsService = new ContractorsService()
+    void contractorsService.findAll()
       .then((response) => {
-        const companies = selectedVehicle?.companies ?? []
+        const contractors = selectedVehicle?.contractors ?? []
 
-        const profileCompanies = companies.map((company) => company.id)
-        const companiesFiltered = response.filter((company) => !profileCompanies?.includes(company.id))
-        setCompanies(companiesFiltered)
-        if (companiesFiltered.length > 0) {
-          setSelectedCompany(companiesFiltered[0].id)
+        const profileContractors = contractors.map((contractor) => contractor.id)
+        const contractorsFiltered = response.filter((contractor) => !profileContractors?.includes(contractor.id))
+        setContractors(contractorsFiltered)
+        if (contractorsFiltered.length > 0) {
+          setSelectedContractor(contractorsFiltered[0].id)
         }
       })
   }, [selectedVehicle])
@@ -36,7 +36,7 @@ const AssignCompany = ({ isOpen, onClose }: AddVehicleFormProps): ReactElement =
     event.preventDefault()
     const vehiclesService = new VehiclesService()
 
-    vehiclesService.assignCompany(selectedVehicle?.licensePlate ?? '', selectedCompany)
+    vehiclesService.assignContractor(selectedVehicle?.licensePlate ?? '', selectedContractor)
       .then((response) => {
         updateVehicle(response)
         setSelectedVehicle(response)
@@ -53,7 +53,7 @@ const AssignCompany = ({ isOpen, onClose }: AddVehicleFormProps): ReactElement =
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     const { value } = event.target
 
-    setSelectedCompany(value)
+    setSelectedContractor(value)
   }
 
   const inputClass = 'block w-full h-10 px-2 border-b border-solid border-purple-900 outline-none'
@@ -61,16 +61,16 @@ const AssignCompany = ({ isOpen, onClose }: AddVehicleFormProps): ReactElement =
   const modal = (): ReactElement => (
     <>
       <div className='mb-4'>
-        <p className='text-center uppercase font-bold text-xl'>Asignar Empresa</p>
-        <p className='text-center uppercase '><span className='font-bold'>Vehículo seleccionado:</span> {selectedVehicle?.licensePlate}</p>
+        <p className='text-center uppercase font-bold text-xl'>Asignar Empresa Contratante</p>
+        <p className='text-center uppercase text-xl'><span className='font-bold'>Vehículo seleccionado:</span> {selectedVehicle?.licensePlate}</p>
       </div>
 
       <form onSubmit={handleSubmit}>
         <select name="sponsor" onChange={handleChange} className={`${inputClass}`}>
           {
-            companies.map(company => {
+            contractors.map(contractor => {
               return (
-                <option key={company.id} value={company.id}>{company.name.toUpperCase()}</option>
+                <option key={contractor.id} value={contractor.id}>{contractor.name.toUpperCase()}</option>
               )
             })
           }
@@ -84,7 +84,7 @@ const AssignCompany = ({ isOpen, onClose }: AddVehicleFormProps): ReactElement =
     </>
   )
 
-  const assignCompanyMessage = (): ReactElement => (
+  const assignContractorMessage = (): ReactElement => (
     <>
       <p className='text-center mb-3 text-lg'>No hay empresas, por favor añade una empresa para asignarla</p>
 
@@ -97,10 +97,10 @@ const AssignCompany = ({ isOpen, onClose }: AddVehicleFormProps): ReactElement =
   return (
     <Modal isOpen={isOpen} onClose={onClose} className='w-full min-w-[300px] sm:min-w-[600px]'>
       <div className='p-3'>
-        {companies.length > 0 ? modal() : assignCompanyMessage()}
+        {contractors.length > 0 ? modal() : assignContractorMessage()}
       </div>
     </Modal>
   )
 }
 
-export default AssignCompany
+export default AssignContractor

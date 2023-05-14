@@ -57,7 +57,10 @@ const roleLinks: Record<UserRole, NavbarLink[]> = {
       isDropdown: true,
       subLinks: [
         { name: 'M. Usuarios', to: 'usuarios', icon: <UserIcon className='w-5 h-5' /> },
-        { name: 'Empresas', to: 'empresas', icon: <MaterialIcon className='w-5 h-5'/> }
+        { name: 'M. Conductores', to: 'conductores', icon: <UserIcon className='w-5 h-5'/> },
+        { name: 'M. Empresas', to: 'empresas', icon: <MaterialIcon className='w-5 h-5'/> },
+        { name: 'M. Contratantes', to: 'contratantes', icon: <MaterialIcon className='w-5 h-5'/> },
+        { name: 'M. Proyectos', to: 'proyectos', icon: <MaterialIcon className='w-5 h-5'/> }
       ]
     },
     {

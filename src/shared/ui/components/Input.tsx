@@ -1,6 +1,6 @@
 import React, { type ReactElement, useEffect, useState } from 'react'
 
-type InputType = 'text' | 'password' | 'number' | 'checkbox' | 'textarea' | 'email' | 'date' | 'tel'
+type InputType = 'text' | 'password' | 'number' | 'checkbox' | 'textsponsor' | 'email' | 'date' | 'tel'
 
 interface InputProps {
   label: string
@@ -45,7 +45,7 @@ const Input = ({ label, name, placeholder, value, type, reset = false, disabled 
       return
     }
 
-    if (value.trim() === '') {
+    if (value.trim() === '' && required) {
       setError(`El campo ${label.toLowerCase()} no puede estar vacío`)
     } else {
       setError('')
@@ -110,7 +110,7 @@ const Input = ({ label, name, placeholder, value, type, reset = false, disabled 
     tel: input,
     number: input,
     checkbox: checkboxInput,
-    textarea: textArea
+    textsponsor: textArea
   }
 
   return (

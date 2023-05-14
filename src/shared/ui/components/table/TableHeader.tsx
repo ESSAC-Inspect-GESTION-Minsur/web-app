@@ -29,7 +29,7 @@ const TableHeader = ({ columns, hasActions }: TableHeaderProps): ReactElement =>
     return sortDirection === 'asc' ? <SortIconAsc className={className} /> : <SortIconDesc className={className} />
   }
 
-  const tableHeadStyle = 'text-sm font-medium text-white px-6 py-4 capitalize'
+  const tableHeadStyle = 'text-sm font-semibold text-white px-6 py-4 uppercase'
 
   return (
     <thead className='border-b bg-black'>
