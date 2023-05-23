@@ -12,7 +12,7 @@ import VehicleFormModal from '../components/VehicleFormModal'
 import ImportModal from '@/admin/ui/components/ImportModal'
 import VehicleDetailModal from '../components/VehicleDetailModal'
 import AssignCompany from '../components/AssignCompany'
-import AssignContractor from '../components/AssignContractor'
+import AssignSponsor from '../components/AssignSponsor'
 
 interface VehicleViewProps {
   areCarts: boolean
@@ -93,7 +93,7 @@ const VehiclesView = ({ areCarts }: VehicleViewProps): ReactElement => {
       <ImportModal isOpen={showImportModal} onClose={toggleShowImportModal} onSuccess={onImportSuccess} toastId={TOAST_ID} type={importType}/>
       <VehicleDetailModal isOpen={showDetailModal} onClose={toggleShowDetailModal}/>
       <AssignCompany isOpen={showAssignCompanyModal} onClose={toggleShowAssignCompanyModal}/>
-      <AssignContractor isOpen={showAssignContractorModal} onClose={toggleShowAssignContractorModal}/>
+      <AssignSponsor isOpen={showAssignContractorModal} onClose={toggleShowAssignContractorModal}/>
       { !areCarts && <ImportModal isOpen={isImportAssignCompanyModalShown} onClose={toggleShowImportAssignCompanyModal} onSuccess={refreshImportedVehiclesWithCompany} toastId={TOAST_ID} type='assign-vehicle-company' />}
 
       <Toast id={TOAST_ID} />

@@ -33,8 +33,8 @@ export class VehiclesService extends AppServices {
       .then(response => response.data)
   }
 
-  assignContractor = async (licensePlate: string, contractorId: string): Promise<Vehicle> => {
-    return await this.patch<Vehicle>(`/${licensePlate}/assign-contractor/${contractorId}`)
+  assignSponsor = async (licensePlate: string, sponsorId: string): Promise<Vehicle> => {
+    return await this.patch<Vehicle>(`/${licensePlate}/assign-sponsor/${sponsorId}`)
       .then(response => response.data)
   }
 }

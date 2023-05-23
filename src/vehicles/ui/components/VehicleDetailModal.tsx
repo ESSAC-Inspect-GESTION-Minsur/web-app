@@ -91,14 +91,14 @@ const VehicleDetailModal = ({ isOpen, onClose }: UpdateVehicleFormProps): ReactE
 
         <Divider className='my-[6px]'></Divider>
 
-        <h3 className='font-bold uppercase'>Empresas Contratantes</h3>
+        <h3 className='font-bold uppercase'>Sponsors</h3>
         <div>
           {
-            vehicle.contractors.length > 0
-              ? vehicle.contractors.map((company, index) => (
-                <div key={company.id} className='flex gap-2'>
-                  <p className='font-semibold'>Contratante {index + 1}: </p>
-                  <p>{company.name}</p>
+            vehicle.sponsors.length > 0
+              ? vehicle.sponsors.map((sponsor, index) => (
+                <div key={sponsor.id} className='flex gap-2'>
+                  <p className='font-semibold'>Sponsor {index + 1}: </p>
+                  <p>{sponsor.name}</p>
                 </div>))
               : <p>No tiene empresas contratantes asignadas</p>
           }

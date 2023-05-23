@@ -153,7 +153,7 @@ const DriverFormModal = ({ isOpen, onClose }: DriverFormModalProps): ReactElemen
               name='company'
               objects={companies}
               setValue={(name, value) => {
-                const company = companies.find(company => company.name === value)
+                const company = companies.find(company => company.id === value)
                 if (!company) return
                 setSelectedCompany(company)
               }}

@@ -33,4 +33,9 @@ export class SponsorsService extends AppServices {
     return await this.post<User>(`/${sponsorId}/users/${userId}`)
       .then(response => response.data)
   }
+
+  assignVehicle = async (sponsorId: string, vehicleId: string): Promise<User> => {
+    return await this.post<User>(`/${sponsorId}/vehicles/${vehicleId}`)
+      .then(response => response.data)
+  }
 }
