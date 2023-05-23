@@ -24,13 +24,14 @@ const AssignCompanyModal = ({ isOpen, onClose }: AssignCompanyModalProps): React
     void contractorsService.findAll()
       .then((contractors) => {
         if (contractors.length === 0) return
-        const driverContractors = selectedCompany?.contractors ?? []
-        const actualContractorsIds = driverContractors.map((contractor) => contractor.id)
+        const companyContractors = selectedCompany?.contractors ?? []
+        console.log(companyContractors)
+        const actualContractorsIds = companyContractors.map((contractor) => contractor.id)
 
         const filteredContractors = contractors.filter((company) => !actualContractorsIds.includes(company.id))
         setContractors(filteredContractors)
       })
-  }, [])
+  }, [selectedCompany])
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     if (!selectedCompany || !selectedContractor) return

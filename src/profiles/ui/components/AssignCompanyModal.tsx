@@ -30,7 +30,7 @@ const AssignCompanyModal = ({ isOpen, onClose }: AssignCompanyModalProps): React
         const filteredCompanies = companies.filter((company) => !actualCompaniesIds.includes(company.id))
         setCompanies(filteredCompanies)
       })
-  }, [])
+  }, [selectedDriver])
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     if (!selectedDriver || !selectedCompany) return

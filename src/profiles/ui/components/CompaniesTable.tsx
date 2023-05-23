@@ -31,6 +31,32 @@ const CompaniesTable = ({ toggleShowAssignContractorModal }: CompaniesTableProps
       sortFunc: (a, b) => a.ruc > b.ruc ? 1 : -1
     },
     {
+      id: 'contractors',
+      columnName: 'Contratantes',
+      filterFunc: (company) => company.contractors.map(contractor => contractor.name).join(' '),
+      render: (company) => {
+        const contractors = company.contractors
+
+        if (contractors.length <= 0) {
+          return 'No hay contratantes asignados'
+        }
+
+        const filteredArray = contractors.filter(
+          (obj, index, self) => index === self.findIndex((o) => o.id === obj.id)
+        )
+
+        return (
+          <select className='block w-full h-10 px-2 rounded-t-md border-b border-solid border-blue-dark outline-none capitalize'>
+            {
+              ...filteredArray.map((contractor) => (
+                <option key={contractor.id}>{contractor.name}</option>
+              ))
+            }
+          </select>
+        )
+      }
+    },
+    {
       id: 'status',
       columnName: 'Estado',
       filterFunc: (company) => company.active ? 'ACTIVO' : 'NO ACTIVO',

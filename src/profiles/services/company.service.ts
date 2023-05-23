@@ -27,12 +27,12 @@ export class CompaniesService extends AppServices {
   }
 
   assignContractor = async (id: string, contractorId: string): Promise<Company> => {
-    return await this.patch<Company>(`/${id}/assign-contractor/${contractorId}`)
+    return await this.patch<Company>(`/${id}/assign-contractor?contractorId=${contractorId}`)
       .then(response => response.data)
   }
 
   removeContractor = async (id: string, contractorId: string): Promise<Company> => {
-    return await this.patch<Company>(`/${id}/remove-contractor/${contractorId}`)
+    return await this.patch<Company>(`/${id}/remove-contractor?contractorId=${contractorId}`)
       .then(response => response.data)
   }
 
