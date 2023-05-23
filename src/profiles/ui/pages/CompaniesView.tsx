@@ -10,6 +10,7 @@ import CompaniesTable from '../components/CompaniesTable'
 import CompaniesForm from '../components/CompaniesForm'
 import ImportModal from '@/admin/ui/components/ImportModal'
 import { useBooleanState } from '@/shared/hooks/useBooleanState'
+import AssignContractorModal from '../components/AssignContractorModal'
 
 const TOAST_ID = 'companies-view'
 
@@ -20,6 +21,7 @@ const CompaniesView = (): ReactElement => {
   const [companyForm, setCompanyForm] = useState<Company | null>(null)
 
   const [showImportModal, toggleShowImportModal] = useBooleanState()
+  const [showAssignContractorModal, toggleShowAssignContractorModal] = useBooleanState()
 
   useEffect(() => {
     const companiesService = new CompaniesService()
@@ -52,7 +54,7 @@ const CompaniesView = (): ReactElement => {
         <div className='w-[90%] mx-auto'>
           <div className='flex flex-col gap-10 md:flex-row'>
             <div className='order-2 md:order-1 md:w-[70%]'>
-              <CompaniesTable />
+              <CompaniesTable toggleShowAssignContractorModal={toggleShowAssignContractorModal}/>
             </div>
             <aside className='md:w-[30%] md:order-2'>
               <CompaniesForm />
@@ -63,6 +65,7 @@ const CompaniesView = (): ReactElement => {
       </div>
 
       <ImportModal isOpen={showImportModal} onClose={toggleShowImportModal} onSuccess={refreshImportedCompanies} toastId={TOAST_ID} type='company' />
+      <AssignContractorModal isOpen={showAssignContractorModal} onClose={toggleShowAssignContractorModal} />
 
       <Toast id={TOAST_ID} />
 

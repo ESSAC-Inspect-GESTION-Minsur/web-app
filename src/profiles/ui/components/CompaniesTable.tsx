@@ -6,8 +6,13 @@ import DeleteIcon from '@/shared/ui/assets/icons/DeleteIcon'
 import { CompaniesService } from '@/profiles/services/company.service'
 import { toast } from 'react-toastify'
 import { CompanyContext } from '../contexts/CompanyContext'
+import AdminIcon from '@/shared/ui/assets/icons/AdminIcon'
 
-const CompaniesTable = (): ReactElement => {
+interface CompaniesTableProps {
+  toggleShowAssignContractorModal: () => void
+}
+
+const CompaniesTable = ({ toggleShowAssignContractorModal }: CompaniesTableProps): ReactElement => {
   const { companies, setSelectedCompany, setCompanyForm, removeCompany, toastId } = useContext(CompanyContext)
 
   const AREAS_COLUMNS: Array<Column<Company>> = [
@@ -63,6 +68,11 @@ const CompaniesTable = (): ReactElement => {
       })
   }
 
+  const assignContractor = (company: Company): void => {
+    setSelectedCompany(company)
+    toggleShowAssignContractorModal()
+  }
+
   const COMPANY_ACTIONS: Array<Action<Company>> = [
     {
       icon: () => (<EditIcon className='cursor-pointer w-5 h-5' />),
@@ -71,6 +81,10 @@ const CompaniesTable = (): ReactElement => {
     {
       icon: () => (<DeleteIcon className='cursor-pointer w-5 h-5 text-red' />),
       actionFunc: remove
+    },
+    {
+      icon: () => (<AdminIcon className='cursor-pointer w-5 h-5 text-blue' />),
+      actionFunc: assignContractor
     }
   ]
 

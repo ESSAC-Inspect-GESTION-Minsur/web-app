@@ -1,7 +1,10 @@
+import { type Contractor } from './contractor.interface'
+
 export interface Company {
   id: string
   name: string
   ruc: string
+  contractors: Contractor[]
 
   createdAt: string
   updatedAt: string
@@ -14,6 +17,7 @@ export const INITIAL_STATE_COMPANY: Company = {
   id: '',
   name: '',
   ruc: '',
+  contractors: [],
   createdAt: '',
   updatedAt: '',
   active: true

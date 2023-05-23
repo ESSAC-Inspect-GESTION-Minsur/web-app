@@ -26,6 +26,16 @@ export class CompaniesService extends AppServices {
       .then(response => response.data)
   }
 
+  assignContractor = async (id: string, contractorId: string): Promise<Company> => {
+    return await this.patch<Company>(`/${id}/assign-contractor/${contractorId}`)
+      .then(response => response.data)
+  }
+
+  removeContractor = async (id: string, contractorId: string): Promise<Company> => {
+    return await this.patch<Company>(`/${id}/remove-contractor/${contractorId}`)
+      .then(response => response.data)
+  }
+
   remove = async (id: string): Promise<Company> => {
     return await this.delete<Company>(`/${id}`)
       .then(response => response.data)
