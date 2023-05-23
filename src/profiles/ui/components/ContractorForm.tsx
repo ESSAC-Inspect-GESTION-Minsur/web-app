@@ -23,11 +23,12 @@ const ContractorForm = (): ReactElement => {
       return
     }
 
-    const { name } = contractorForm
+    const { name, ruc } = contractorForm
     setFormAction('update')
 
     setContractor({
-      name
+      name,
+      ruc
     })
   }, [contractorForm])
 
@@ -52,10 +53,9 @@ const ContractorForm = (): ReactElement => {
         toast(`Empresa ${formAction === 'add' ? 'añadido' : 'actualizado'} correctamente`, { toastId, type: 'success' })
       })
       .catch(error => {
-        console.log(error)
-        const { message } = error.contractor
-        const errorMessage = typeof message === 'object' ? message.join(' ') : message
-        toast(errorMessage, { toastId, type: 'error' })
+        const { message } = error.data
+        const errors = typeof message === 'object' ? Object.values(message).join(',') : message
+        toast(errors, { toastId, type: 'error' })
       })
       .finally(() => {
         setIsSubmitting(false)
@@ -66,14 +66,23 @@ const ContractorForm = (): ReactElement => {
     <div className='shadow-card p-5 rounded-md'>
       <form onSubmit={handleSubmit}>
 
-          <Input
-            label='Nombre'
-            name='name'
-            placeholder='Ingresa nombre'
-            value={contractor.name}
-            setValue={setContractorValue}
-            type='text'
-          />
+        <Input
+          label='Nombre'
+          name='name'
+          placeholder='Ingresa nombre'
+          value={contractor.name}
+          setValue={setContractorValue}
+          type='text'
+        />
+
+        <Input
+          label='Ruc'
+          name='ruc'
+          placeholder='Ingresa ruc'
+          value={contractor.ruc}
+          setValue={setContractorValue}
+          type='text'
+        />
 
         <div className='mt-3 flex gap-3 justify-end'>
           <Button color='primary' type='submit' isLoading={isSubmitting}>{formAction === 'add' ? 'Añadir' : 'Editar'}</Button>

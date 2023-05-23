@@ -6,7 +6,15 @@ import Modal from '@/shared/ui/components/Modal'
 import Divider from '@/shared/ui/components/Divider'
 import Button from '@/shared/ui/components/Button'
 
-type ImportObject = 'profile' | 'vehicle' | 'company' | 'assign-driver-company' | 'assign-vehicle-company' | 'cart'
+type ImportObject =
+  'profile' |
+  'vehicle' |
+  'company' |
+  'contractor' |
+  'cart' |
+  'assign-driver-company' |
+  'assign-vehicle-company' |
+  'assign-company-contractor'
 
 interface ImportExcelProps {
   isOpen: boolean
@@ -37,9 +45,11 @@ const ImportExcel = ({ isOpen, onClose, onSuccess, toastId, type }: ImportExcelP
       profile: 'Conductores',
       vehicle: 'Vehículos',
       company: 'Empresas',
+      contractor: 'Empresas contratantes',
       cart: 'Semirremolques',
       'assign-driver-company': 'Asignar conductores a empresas',
-      'assign-vehicle-company': 'Asignar vehículos a empresas'
+      'assign-vehicle-company': 'Asignar vehículos a empresas',
+      'assign-company-contractor': 'Asignar empresas contratantes a empresas'
     }
 
     return titles[type]
@@ -62,9 +72,11 @@ const ImportExcel = ({ isOpen, onClose, onSuccess, toastId, type }: ImportExcelP
       profile: adminService.importDriverExcel,
       vehicle: adminService.importVehicleExcel,
       company: adminService.importCompanyExcel,
+      contractor: adminService.importContractorExcel,
       cart: adminService.importCartExcel,
       'assign-driver-company': adminService.importAssignUserCompanyExcel,
-      'assign-vehicle-company': adminService.importAssignVehicleCompanyExcel
+      'assign-vehicle-company': adminService.importAssignVehicleCompanyExcel,
+      'assign-company-contractor': adminService.importAssignCompanyContractorExcel
     }
     const importExcelFunction = importFunctions[type]
 

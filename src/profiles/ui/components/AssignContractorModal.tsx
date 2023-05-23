@@ -83,7 +83,7 @@ const AssignCompanyModal = ({ isOpen, onClose }: AssignCompanyModalProps): React
         </form>
           )
         : (
-        <p className='text-center'>No hay más proyectos registrados</p>
+        <p className='text-center'>No hay empresas contratantes registrados</p>
           )
         }
     </Modal>

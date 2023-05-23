@@ -16,7 +16,14 @@ const ContractorsTable = (): ReactElement => {
       columnName: 'Nombre',
       filterFunc: (contractor) => contractor.name,
       render: (contractor) => contractor.name.toUpperCase(),
-      sortFunc: (a, b) => a.name > b.name ? 1 : -1
+      sortFunc: (a, b) => a.name.localeCompare(b.name)
+    },
+    {
+      id: 'ruc',
+      columnName: 'Ruc',
+      filterFunc: (contractor) => contractor.ruc,
+      render: (contractor) => contractor.ruc.toUpperCase(),
+      sortFunc: (a, b) => a.ruc > b.ruc ? 1 : -1
     },
     {
       id: 'status',

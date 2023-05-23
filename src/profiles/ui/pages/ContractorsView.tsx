@@ -7,9 +7,9 @@ import { ContractorsService } from '@/profiles/services/contractor.service'
 import { ContractorContext } from '../contexts/ContractorContext'
 import ContractorTable from '../components/ContractorTable'
 import ContractorForm from '../components/ContractorForm'
-// import Button from '@/shared/ui/components/Button'
-// import ImportModal from '@/admin/ui/components/ImportModal'
-// import { useBooleanState } from '@/shared/hooks/useBooleanState'
+import Button from '@/shared/ui/components/Button'
+import ImportModal from '@/admin/ui/components/ImportModal'
+import { useBooleanState } from '@/shared/hooks/useBooleanState'
 
 const TOAST_ID = 'contractors-view'
 
@@ -19,7 +19,7 @@ const ContractorsView = (): ReactElement => {
   const [selectedContractor, setSelectedContractor] = useState<Contractor | null>(null)
   const [contractorForm, setContractorForm] = useState<Contractor | null>(null)
 
-  // const [showImportModal, toggleShowImportModal] = useBooleanState()
+  const [showImportModal, toggleShowImportModal] = useBooleanState()
 
   useEffect(() => {
     const contractorsService = new ContractorsService()
@@ -27,9 +27,9 @@ const ContractorsView = (): ReactElement => {
       .then(setContractor)
   }, [])
 
-  // const refreshImportedContractor = (newContractor: Contractor[]): void => {
-  //   setContractor([...contractors, ...newContractor])
-  // }
+  const refreshImportedContractor = (newContractor: Contractor[]): void => {
+    setContractor([...contractors, ...newContractor])
+  }
 
   return (
     <ContractorContext.Provider value={{
@@ -46,7 +46,7 @@ const ContractorsView = (): ReactElement => {
       <div className='container-page'>
         <section className='flex justify-between items-center'>
           <h1 className='text-blue-era uppercase text-2xl font-semibold'>Contratantes</h1>
-          {/* <Button color='primary' onClick={toggleShowImportModal}>Importar Excel</Button> */}
+          <Button color='primary' onClick={toggleShowImportModal}>Importar Excel</Button>
         </section>
         <Divider></Divider>
         <div className='w-[90%] mx-auto'>
@@ -62,7 +62,7 @@ const ContractorsView = (): ReactElement => {
 
       </div>
 
-      {/* <ImportModal isOpen={showImportModal} onClose={toggleShowImportModal} onSuccess={refreshImportedContractor} toastId={TOAST_ID} type='contractor' /> */}
+      <ImportModal isOpen={showImportModal} onClose={toggleShowImportModal} onSuccess={refreshImportedContractor} toastId={TOAST_ID} type='contractor' />
 
       <Toast id={TOAST_ID} />
 

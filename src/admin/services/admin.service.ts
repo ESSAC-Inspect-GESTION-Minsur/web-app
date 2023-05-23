@@ -26,6 +26,16 @@ export class AdminService extends AppServices {
       .then(response => response.data)
   }
 
+  importContractorExcel = async (file: any): Promise<ExcelResponse> => {
+    return await this.post<ExcelResponse>('/import-contractor-excel', file)
+      .then(response => response.data)
+  }
+
+  importAssignCompanyContractorExcel = async (file: any): Promise<ExcelResponse> => {
+    return await this.post<ExcelResponse>('/import-assign-contractor-companies-excel', file)
+      .then(response => response.data)
+  }
+
   importAssignUserCompanyExcel = async (file: any): Promise<ExcelResponse> => {
     return await this.post<ExcelResponse>('/import-assign-company-drivers-excel', file)
       .then(response => response.data)
