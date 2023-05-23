@@ -18,8 +18,9 @@ const ReportTypeGroupView = (): ReactElement => {
     const reportTypeGroupsService = new ReportTypeGroupService()
     void reportTypeGroupsService.findAll()
       .then(response => {
-        response.sort((a, b) => a.name.localeCompare(b.name))
-        setReportTypeGroups(response)
+        const groups = Array.from(response)
+        groups.sort((a, b) => a.name.localeCompare(b.name))
+        setReportTypeGroups(groups)
       })
   }, [])
 

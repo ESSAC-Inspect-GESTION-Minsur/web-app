@@ -95,17 +95,17 @@ const VehiclesTable = ({ areCarts, toggleShowForm, toggleShowDetail, toggleAssig
       }
     },
     {
-      id: 'contractors',
+      id: 'sponsors',
       columnName: 'Empresas contratantes',
-      filterFunc: (vehicle) => vehicle.contractors.map(company => company.name).join(' '),
+      filterFunc: (vehicle) => vehicle.sponsors.map(company => company.name).join(' '),
       render: (vehicle) => {
-        const contractors = vehicle.contractors
+        const sponsors = vehicle.sponsors
 
-        if (contractors.length <= 0) {
+        if (sponsors.length <= 0) {
           return 'No hay empresas contratantes asignadas'
         }
 
-        const filteredArray = contractors.filter(
+        const filteredArray = sponsors.filter(
           (obj, index, self) => index === self.findIndex((o) => o.id === obj.id)
         )
 

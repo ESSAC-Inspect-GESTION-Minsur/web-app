@@ -1,6 +1,6 @@
 import { type Company } from '@/profiles/models/company.interface'
 import { VEHICLE_TYPE_INITIAL_STATE, type VehicleType } from './vehicle-type.interface'
-import { type Contractor } from '@/profiles/models/contractor.interface'
+import { type Sponsor } from '@/users/models/sponsor.interface'
 
 export interface Vehicle {
   id: string
@@ -12,14 +12,14 @@ export interface Vehicle {
 
   vehicleType: VehicleType
   companies: Company[]
-  contractors: Contractor[]
+  sponsors: Sponsor[]
 
   createdAt: string
   updatedAt: string
   active: boolean
 }
 
-export interface VehicleDto extends Omit<Vehicle, 'id' | 'createdAt' | 'updatedAt' | 'active' | 'companies' | 'vehicleType' | 'companies' | 'contractors'> {
+export interface VehicleDto extends Omit<Vehicle, 'id' | 'createdAt' | 'updatedAt' | 'active' | 'companies' | 'vehicleType' | 'companies' | 'sponsors'> {
   vehicleTypeId: string
 }
 
@@ -35,7 +35,7 @@ export const VEHICLE_INITIAL_STATE: Vehicle = {
   technicalReviewExpiration: '',
   vehicleType: VEHICLE_TYPE_INITIAL_STATE,
   companies: [],
-  contractors: []
+  sponsors: []
 }
 
 export const VEHICLE_DTO_INITIAL_STATE: VehicleDto = {
