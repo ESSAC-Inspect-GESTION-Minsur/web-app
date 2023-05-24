@@ -6,7 +6,7 @@ const formatDate = (date: string): string => {
 }
 
 export const routeToExcelRoute = (route: Route): Record<string, any> => {
-  const { createdAt, startLocation, endLocation, materialType, name, code, message, state, doubleLicensePlate, isFull, vehicles, reports, routeProfiles } = route
+  const { createdAt, startLocation, endLocation, materialType, name, code, message, state, doubleLicensePlate, isFull, vehicles, routeProfiles } = route
 
   const excelRoute = {
     'FECHA DE CREACIÓN': formatDate(createdAt),
@@ -35,12 +35,12 @@ export const routeToExcelRoute = (route: Route): Record<string, any> => {
     })
   }
 
-  if (reports.length > 0) {
-    const checkpoints = reports[0].checkpoints
-    if (checkpoints.length > 0) {
-      excelRoute.OBSERVACIONES = checkpoints[checkpoints.length - 1].observations.length
-    }
-  }
+  // if (reports.length > 0) {
+  //   const checkpoints = reports[0].checkpoints
+  //   if (checkpoints.length > 0) {
+  //     excelRoute.OBSERVACIONES = checkpoints[checkpoints.length - 1].observations.length
+  //   }
+  // }
 
   if (routeProfiles.length > 0) {
     const routeProfile = routeProfiles.find(routeProfile => routeProfile.role === 'conductor')

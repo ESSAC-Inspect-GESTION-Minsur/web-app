@@ -83,39 +83,39 @@ const RoutesTable = ({ routes, showFilter, setRoutesFiltered }: RoutesTableProps
       render: (route) => route.reports[0].reportType.name,
       sortFunc: (a, b) => a.reports[0].reportType.name > b.reports[0].reportType.name ? 1 : -1
     },
-    {
-      id: 'checkpoints',
-      columnName: 'Supervisiones',
-      filterFunc: (route) => route.reports[0].checkpoints.length.toString(),
-      render: (route) => route.reports[0].checkpoints.length.toString(),
-      sortFunc: (a, b) => a.reports[0].checkpoints.length > b.reports[0].checkpoints.length ? 1 : -1
-    },
-    {
-      id: 'supervisors',
-      columnName: 'Supervisores',
-      filterFunc: (route) => route.reports[0].checkpoints.map(checkpoint => checkpoint.profile.name).join(' '),
-      render: (route) => {
-        const checkpoints = route.reports[0].checkpoints
+    // {
+    //   id: 'checkpoints',
+    //   columnName: 'Supervisiones',
+    //   filterFunc: (route) => route.reports[0].checkpoints.length.toString(),
+    //   render: (route) => route.reports[0].checkpoints.length.toString(),
+    //   sortFunc: (a, b) => a.reports[0].checkpoints.length > b.reports[0].checkpoints.length ? 1 : -1
+    // },
+    // {
+    //   id: 'supervisors',
+    //   columnName: 'Supervisores',
+    //   filterFunc: (route) => route.reports[0].checkpoints.map(checkpoint => checkpoint.profile.name).join(' '),
+    //   render: (route) => {
+    //     const checkpoints = route.reports[0].checkpoints
 
-        if (checkpoints.length <= 0) {
-          return 'No hay superviciones'
-        }
+    //     if (checkpoints.length <= 0) {
+    //       return 'No hay superviciones'
+    //     }
 
-        const filteredArray = checkpoints.filter(
-          (obj, index, self) => index === self.findIndex((o) => o.id === obj.id || o.profile.id === obj.profile.id)
-        )
+    //     const filteredArray = checkpoints.filter(
+    //       (obj, index, self) => index === self.findIndex((o) => o.id === obj.id || o.profile.id === obj.profile.id)
+    //     )
 
-        return (
-          <select className='block w-full h-10 px-2 rounded-t-md border-b border-solid border-blue-dark outline-none capitalize'>
-            {
-              ...filteredArray.map(({ profile }) => (
-                <option key={profile.id}>{profile.name}</option>
-              ))
-            }
-          </select>
-        )
-      }
-    },
+    //     return (
+    //       <select className='block w-full h-10 px-2 rounded-t-md border-b border-solid border-blue-dark outline-none capitalize'>
+    //         {
+    //           ...filteredArray.map(({ profile }) => (
+    //             <option key={profile.id}>{profile.name}</option>
+    //           ))
+    //         }
+    //       </select>
+    //     )
+    //   }
+    // },
     {
       id: 'doubleLicensePlate',
       columnName: 'Doble Placa',
