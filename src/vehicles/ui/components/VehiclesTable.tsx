@@ -70,7 +70,7 @@ const VehiclesTable = ({ areCarts, toggleShowForm, toggleShowDetail, toggleAssig
     },
     {
       id: 'companies',
-      columnName: 'Empresas del transportista',
+      columnName: 'Empresas de transporte',
       filterFunc: (vehicle) => vehicle.companies.map(company => company.name).join(' '),
       render: (vehicle) => {
         const companies = vehicle.companies
@@ -96,7 +96,7 @@ const VehiclesTable = ({ areCarts, toggleShowForm, toggleShowDetail, toggleAssig
     },
     {
       id: 'sponsors',
-      columnName: 'Empresas contratantes',
+      columnName: 'Sponsors',
       filterFunc: (vehicle) => vehicle.sponsors.map(company => company.name).join(' '),
       render: (vehicle) => {
         const sponsors = vehicle.sponsors
