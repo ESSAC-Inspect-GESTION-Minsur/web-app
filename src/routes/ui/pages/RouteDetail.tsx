@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { type ReactElement, useEffect, useState, useMemo } from 'react'
+import React, { type ReactElement, useEffect, useState, useMemo, Fragment } from 'react'
 import { REPORT_INITIAL_STATE, type Report } from '@/reports/models/report.interface'
 import EyeIcon from '@/shared/ui/assets/icons/EyeIcon'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -9,6 +9,7 @@ import { ReportsService } from '@/reports/services/reports.service'
 import { ROUTE_INITIAL_STATE, type Route } from '@/routes/models/route.interface'
 import { type FieldReport } from '@/fields/models/field-report.interface'
 import { type FieldGroup } from '@/fields/models/group.interface'
+import { type CheckpointGroup } from '@/checkpoints/models/checkpoint-group.interface'
 
 interface FieldSelected {
   url: string
@@ -103,21 +104,30 @@ const RouteDetail = (): ReactElement => {
     return cart ?? null
   }, [route])
 
+  const showCheckpoint = (group: CheckpointGroup): void => {
+    navigate(`/detalle-checkpoints?report-id=${report.id}&route-id=${route.id}&group-id=${group.id}`)
+  }
+
   return (
     <div className='container-page'>
-      <div className='flex justify-between'>
-        <h1 className='text-2xl uppercase font-semibold'>Checklist - {route.code}</h1>
-        <div className='flex gap-2'>
-          {report.checkpointGroups.length > 0 && <Button color='primary' onClick={() => { navigate(`/detalle-checkpoints?report-id=${report.id}&route-id=${route.id}`) }}>Ver Observaciones</Button>}
-          <Button color='primary' onClick={exportPdf} isLoading={isPdfLoading}>Exportar PDF</Button>
-        </div>
+      <h1 className='text-2xl uppercase font-semibold'>Supervisión - Checklist Subida - {route.code}</h1>
+      <div className='flex gap-2 mt-2'>
+        {
+          report.checkpointGroups.filter((group) => group.type === 'Bajada').map((checkpointGroup) =>
+            <Button
+              key={checkpointGroup.id}
+              color='secondary'
+              onClick={() => { showCheckpoint(checkpointGroup) }}>Supervisión - Checklist {checkpointGroup.type}</Button>
+          )
+        }
+        <Button color='primary' onClick={exportPdf} isLoading={isPdfLoading}>Exportar PDF</Button>
       </div>
       <div className='h-[1px] bg-gray-400 w-full my-4'></div>
       <div className='border-[1px] border-black border-b-0 mx-auto h-full mb-10'>
         <div className='flex justify-center  border-b-[1px] border-black'>
           <div className='w-[30%] grid place-items-center border-r-[1px] border-black'>
             <div className='p-5'>
-              <img src="./logo-header.png" alt="" width={250}/>
+              <img src="./logo-header.png" alt="" width={250} />
             </div>
           </div>
           <div className='w-[30%] border-r-[1px] border-black'>
