@@ -57,6 +57,7 @@ const ReportTypeGroupForm = (): ReactElement => {
       .then(response => {
         onFinishSubmit(response)
         setSelectedReportTypeGroup(response)
+        setReportTypeGroupForm(null)
         reset()
         toast(`Grupo ${formAction === 'add' ? 'agregado' : 'actualizado'} correctamente`, { toastId, type: 'success' })
       })

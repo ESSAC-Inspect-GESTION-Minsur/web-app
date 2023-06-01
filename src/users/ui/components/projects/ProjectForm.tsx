@@ -6,14 +6,13 @@ import { useDataForm } from '@/shared/hooks/useDataForm'
 import { type FormAction } from '@/shared/types'
 import { useBooleanState } from '@/shared/hooks/useBooleanState'
 import { ProjectContext } from '../../contexts/ProjectContext'
-import { type ProjectDto } from '@/users/models/project.interface'
-import { REPORT_TYPE_DTO_INITIAL_STATE } from '@/reports/models/report-type.interface'
+import { PROJECT_DTO_INITIAL_STATE, type ProjectDto } from '@/users/models/project.interface'
 import { ProjectsService } from '@/users/services/project.service'
 
 const ProjectForm = (): ReactElement => {
   const { toastId, projectForm, setProjectForm, addProject, updateProject } = useContext(ProjectContext)
 
-  const [project, setProjectValue, setProject, reset] = useDataForm<ProjectDto>(REPORT_TYPE_DTO_INITIAL_STATE)
+  const [project, setProjectValue, setProject, reset] = useDataForm<ProjectDto>(PROJECT_DTO_INITIAL_STATE)
 
   const [formAction, setFormAction] = useState<FormAction>('add')
 
@@ -51,9 +50,8 @@ const ProjectForm = (): ReactElement => {
 
     void submitAction(project, id)
       .then((response) => {
-        setProjectForm(null)
         onSuccess(response)
-        reset()
+        handleCancel()
 
         toast(`Proyecto ${formAction === 'add' ? 'añadido' : 'guardado'} correctamente`, { toastId, type: 'success' })
       })
