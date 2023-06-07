@@ -5,7 +5,7 @@ export interface ReportType {
   id: string
   name: string
   vehicleTypes: VehicleType[]
-  reportTypeGroup: ReportTypeGroup | null
+  reportTypeGroups: ReportTypeGroup[]
 
   createdAt: string
   updatedAt: string
@@ -21,7 +21,7 @@ export const REPORT_TYPE_INITIAL_STATE: ReportType = {
   name: '',
   active: false,
   vehicleTypes: [],
-  reportTypeGroup: null
+  reportTypeGroups: []
 }
 
 export const REPORT_TYPE_DTO_INITIAL_STATE: ReportTypeDto = {

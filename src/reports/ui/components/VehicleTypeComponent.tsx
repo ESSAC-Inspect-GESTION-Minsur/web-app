@@ -30,7 +30,7 @@ const VehicleTypeComponent = (): ReactElement => {
     <section>
       <div className='flex justify-between items-center mb-3'>
         <h2 className='uppercase font-bold text-lg'>Tipos de vehículos asignados al <span className='text-red'>checklist {reportType?.name}</span></h2>
-        <Button color='primary' className='mb-2' onClick={toggleShowAssignVehicleTypeModal}>Asignar Tipo de vehículo</Button>
+        {reportType && <Button color='primary' className='mb-2' onClick={toggleShowAssignVehicleTypeModal}>Asignar Tipo de vehículo</Button>}
       </div>
       <VehicleTypesDetail vehicleTypes={vehicleTypes} update={update}/>
       <AssignVehicleType isOpen={showAssignVehicleTypeModal} onClose={toggleShowAssignVehicleTypeModal} reportTypeVehicleTypes={vehicleTypes} update={update} />

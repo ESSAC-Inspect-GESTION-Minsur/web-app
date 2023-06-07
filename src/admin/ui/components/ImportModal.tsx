@@ -44,12 +44,12 @@ const ImportExcel = ({ isOpen, onClose, onSuccess, toastId, type }: ImportExcelP
     const titles = {
       profile: 'Conductores',
       vehicle: 'Vehículos',
-      company: 'Empresas',
+      company: 'Empresas de transporte',
       contractor: 'Empresas contratantes',
       cart: 'Semirremolques',
-      'assign-driver-company': 'Asignar conductores a empresas',
-      'assign-vehicle-company': 'Asignar vehículos a empresas',
-      'assign-company-contractor': 'Asignar empresas contratantes a empresas'
+      'assign-driver-company': 'Asignar conductores a empresas de transporte',
+      'assign-vehicle-company': 'Asignar vehículos a empresas de transporte',
+      'assign-company-contractor': 'Asignar empresas contratantes a empresas de transporte'
     }
 
     return titles[type]

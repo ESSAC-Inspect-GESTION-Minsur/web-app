@@ -43,7 +43,7 @@ const SponsorsComponent = (): ReactElement => {
     }}>
       <section className='p-3'>
         <div className='flex justify-between items-center'>
-          <h2 className='text-xl font-bold uppercase'>Sponsors del proyecto {selectedProject?.name}</h2>
+          <h2 className='text-xl font-bold uppercase'>Sponsor del proyecto {selectedProject?.name}</h2>
           <Button color='primary' onClick={toggleShowForm}>Crear Sponsor</Button>
         </div>
         <Divider></Divider>

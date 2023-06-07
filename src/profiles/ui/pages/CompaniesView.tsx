@@ -31,6 +31,7 @@ const CompaniesView = (): ReactElement => {
   }, [])
 
   const refreshImportedCompanies = (newCompanies: Company[]): void => {
+    console.log('newCompanies', newCompanies)
     setCompanies([...companies, ...newCompanies])
   }
 
@@ -55,7 +56,7 @@ const CompaniesView = (): ReactElement => {
     }}>
       <div className='container-page'>
         <section className='flex justify-between items-center'>
-          <h1 className='text-blue-era uppercase text-2xl font-semibold'>Empresas</h1>
+          <h1 className='text-blue-era uppercase text-2xl font-semibold'>Empresas Transporte</h1>
           <div className="flex gap-2">
             <Button color='primary' onClick={toggleShowImportModal}>Importar Excel</Button>
             <Button color='primary' onClick={toggleShowImportAssignContractorModal}>Importar Asignar Contratantes</Button>

@@ -36,9 +36,9 @@ const DriverDetail = ({ toggleForm, toggleAssignCompanyModal }: DriverDetailProp
         <p><span className='font-semibold uppercase'>Nombre:</span> {selectedDriver.name}</p>
         <p><span className='font-semibold uppercase'>Apellido:</span> {selectedDriver.lastName}</p>
         <p><span className='font-semibold uppercase'>Dni:</span> {selectedDriver.dni}</p>
-        <p><span className='font-semibold uppercase'>Teléfono 1:</span> {selectedDriver.license}</p>
-        <p><span className='font-semibold uppercase'>Teléfono 2:</span> {selectedDriver.licenseCategory ?? 'No registrado'}</p>
-        <p><span className='font-semibold uppercase'>correo:</span> {formatLicenseExpiration()}</p>
+        <p><span className='font-semibold uppercase'>Licencia:</span> {selectedDriver.license}</p>
+        <p><span className='font-semibold uppercase'>Categoría:</span> {selectedDriver.licenseCategory ?? 'No registrado'}</p>
+        <p><span className='font-semibold uppercase'>Vencimiento Licencia:</span> {formatLicenseExpiration()}</p>
       </div>
 
       {

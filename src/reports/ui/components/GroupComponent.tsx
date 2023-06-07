@@ -55,7 +55,7 @@ const GroupsComponent = (): ReactElement => {
       <section>
         <div className='flex justify-between items-center mb-3'>
           <h2 className='uppercase font-bold text-lg'>Secciones del <span className='text-red'>checklist {selectedReportType?.name}</span></h2>
-          <Button color='primary' onClick={handleAddGroup} className='mb-2'>Agregar sección</Button>
+          {selectedReportType && <Button color='primary' onClick={handleAddGroup} className='mb-2'>Agregar sección</Button>}
         </div>
         <GroupsDetail />
 

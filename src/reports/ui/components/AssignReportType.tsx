@@ -7,6 +7,7 @@ import { REPORT_TYPE_INITIAL_STATE, type ReportType } from '@/reports/models/rep
 import { ReportTypeGroupService } from '@/reports/services/report-type-group.service'
 import { ReportTypesService } from '@/reports/services/report-types.service'
 import { ReportTypeGroupContext } from '../contexts/ReportTypeGroupContext'
+import { useNavigate } from 'react-router-dom'
 
 interface AssignReportTypeProps {
   isOpen: boolean
@@ -21,6 +22,8 @@ const AssignReportType = ({ isOpen, onClose }: AssignReportTypeProps): ReactElem
     updateReportTypeGroup
   } = useContext(ReportTypeGroupContext)
 
+  const navigate = useNavigate()
+
   const [reportTypes, setReportTypes] = useState<ReportType[]>([])
   const [selectedReportType, setSelectedReportType] = useState<ReportType>(REPORT_TYPE_INITIAL_STATE)
 
@@ -30,7 +33,7 @@ const AssignReportType = ({ isOpen, onClose }: AssignReportTypeProps): ReactElem
       .then(response => {
         const actualReportTypes = reportTypeGroup?.reportTypes ?? []
         const actualReportTypeIds = actualReportTypes.map(reportType => reportType.id)
-        setReportTypes(response.filter(reportType => !actualReportTypeIds?.includes(reportType.id) && reportType.reportTypeGroup === null))
+        setReportTypes(response.filter(reportType => !actualReportTypeIds?.includes(reportType.id)))
       })
   }, [reportTypeGroup])
 
@@ -85,7 +88,7 @@ const AssignReportType = ({ isOpen, onClose }: AssignReportTypeProps): ReactElem
         <p className='text-center mb-3 text-lg'>Todos los checklists están asignados, crea algún tipo de checklist si deseas asignar más</p>
 
         <div className='flex justify-center gap-3 items-center'>
-          <Button color='primary' onClick={onClose}>Añadir tipo de checklist</Button>
+          <Button color='primary' onClick={() => { navigate('/admin/reportes') }}>Añadir tipo de checklist</Button>
           <Button color='secondary' onClick={onClose}>Cerrar</Button>
         </div>
       </div>
