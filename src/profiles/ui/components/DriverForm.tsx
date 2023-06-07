@@ -12,7 +12,7 @@ import Divider from '@/shared/ui/components/Divider'
 import { INITIAL_STATE_COMPANY, type Company } from '@/profiles/models/company.interface'
 import { CompaniesService } from '@/profiles/services/company.service'
 import SelectInput from '@/shared/ui/components/SelectInput'
-import { isDate } from 'util/types'
+import { isDate } from '@/shared/utils'
 
 interface DriverFormModalProps {
   isOpen: boolean
