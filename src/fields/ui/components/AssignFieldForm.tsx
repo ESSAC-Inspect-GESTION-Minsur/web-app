@@ -44,7 +44,7 @@ const AssignFieldForm = ({ group, groupFields, onSuccess, close }: AssignFieldFo
           .then(groupFields => {
             const existingGroupFields = groupFields.map(groupField => groupField.fieldId)
             const filteredFields = response.filter(field => (!actualFields.includes(field.id) && !existingGroupFields.includes(field.id)) && field.active)
-            filteredFields.sort((a, b) => a.id > b.id ? 1 : -1)
+            filteredFields.sort((a, b) => a.name.localeCompare(b.name))
             setFields(filteredFields)
           })
       })
