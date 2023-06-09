@@ -43,6 +43,7 @@ const SponsorFormModal = ({ isOpen, onClose }: SponsorFormModalProps): ReactElem
   const handleCancel = (): void => {
     setSponsorForm(null)
     reset()
+    onClose()
   }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {

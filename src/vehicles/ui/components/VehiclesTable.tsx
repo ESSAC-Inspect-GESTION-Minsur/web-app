@@ -3,11 +3,10 @@ import { toast } from 'react-toastify'
 import Table, { type Action, type Column } from '@/shared/ui/components/table/Table'
 import DeleteIcon from '@/shared/ui/assets/icons/DeleteIcon'
 import EditIcon from '@/shared/ui/assets/icons/EditIcon'
+import AdminIcon from '@/shared/ui/assets/icons/AdminIcon'
 import { VehiclesService } from '@/vehicles/services/vehicles.service'
 import { type Vehicle } from '@/vehicles/models/vehicle.interface'
 import { VehicleContext } from '../contexts/VehicleContext'
-import { isDate } from '@/shared/utils'
-import AdminIcon from '@/shared/ui/assets/icons/AdminIcon'
 // import EyeIcon from '@/shared/ui/assets/icons/EyeIcon'
 
 interface VehiclesTableProps {
@@ -120,63 +119,63 @@ const VehiclesTable = ({ areCarts, toggleShowForm, toggleShowDetail, toggleAssig
         )
       }
     },
-    {
-      id: 'soatExpiration',
-      columnName: 'F. Venc. Soat',
-      filterFunc: (vehicle) => {
-        if (!vehicle.soatExpiration) {
-          return 'No registrado'
-        }
-        return isDate(vehicle.soatExpiration) ? new Date(vehicle.soatExpiration).toDateString() : 'No registrado'
-      },
-      sortFunc: (a, b) => {
-        const aSoatExpiration = a.soatExpiration ?? 'No registrado'
-        const bSoatExpiration = b.soatExpiration ?? 'No registrado'
+    // {
+    //   id: 'soatExpiration',
+    //   columnName: 'F. Venc. Soat',
+    //   filterFunc: (vehicle) => {
+    //     if (!vehicle.soatExpiration) {
+    //       return 'No registrado'
+    //     }
+    //     return isDate(vehicle.soatExpiration) ? new Date(vehicle.soatExpiration).toDateString() : 'No registrado'
+    //   },
+    //   sortFunc: (a, b) => {
+    //     const aSoatExpiration = a.soatExpiration ?? 'No registrado'
+    //     const bSoatExpiration = b.soatExpiration ?? 'No registrado'
 
-        if (isNaN(Date.parse(aSoatExpiration)) && isNaN(Date.parse(bSoatExpiration))) {
-          return aSoatExpiration > bSoatExpiration ? 1 : -1
-        }
+    //     if (isNaN(Date.parse(aSoatExpiration)) && isNaN(Date.parse(bSoatExpiration))) {
+    //       return aSoatExpiration > bSoatExpiration ? 1 : -1
+    //     }
 
-        return new Date(aSoatExpiration).getTime() - new Date(bSoatExpiration).getTime()
-      },
-      render: (vehicle) => {
-        if (vehicle.soatExpiration === null || !isDate(vehicle.soatExpiration)) {
-          return 'No registrado'
-        }
+    //     return new Date(aSoatExpiration).getTime() - new Date(bSoatExpiration).getTime()
+    //   },
+    //   render: (vehicle) => {
+    //     if (vehicle.soatExpiration === null || !isDate(vehicle.soatExpiration)) {
+    //       return 'No registrado'
+    //     }
 
-        return new Date(vehicle.soatExpiration).toDateString()
-      }
-    },
-    {
-      id: 'technicalReviewExpiration',
-      columnName: 'F. Venc. Revisión Técnica',
-      filterFunc: (vehicle) => {
-        if (!vehicle.technicalReviewExpiration) {
-          return 'No registrado'
-        }
-        return isDate(vehicle.technicalReviewExpiration) ? new Date(vehicle.technicalReviewExpiration).toDateString() : 'No registrado'
-      },
-      sortFunc: (a, b) => {
-        const aTechnicalReviewExpiration = a.technicalReviewExpiration ?? 'No registrado'
-        const bTechnicalReviewExpiration = b.technicalReviewExpiration ?? 'No registrado'
+    //     return new Date(vehicle.soatExpiration).toDateString()
+    //   }
+    // },
+    // {
+    //   id: 'technicalReviewExpiration',
+    //   columnName: 'F. Venc. Revisión Técnica',
+    //   filterFunc: (vehicle) => {
+    //     if (!vehicle.technicalReviewExpiration) {
+    //       return 'No registrado'
+    //     }
+    //     return isDate(vehicle.technicalReviewExpiration) ? new Date(vehicle.technicalReviewExpiration).toDateString() : 'No registrado'
+    //   },
+    //   sortFunc: (a, b) => {
+    //     const aTechnicalReviewExpiration = a.technicalReviewExpiration ?? 'No registrado'
+    //     const bTechnicalReviewExpiration = b.technicalReviewExpiration ?? 'No registrado'
 
-        if (isNaN(Date.parse(aTechnicalReviewExpiration)) && isNaN(Date.parse(bTechnicalReviewExpiration))) {
-          return aTechnicalReviewExpiration > bTechnicalReviewExpiration ? 1 : -1
-        }
+    //     if (isNaN(Date.parse(aTechnicalReviewExpiration)) && isNaN(Date.parse(bTechnicalReviewExpiration))) {
+    //       return aTechnicalReviewExpiration > bTechnicalReviewExpiration ? 1 : -1
+    //     }
 
-        return new Date(aTechnicalReviewExpiration).getTime() - new Date(bTechnicalReviewExpiration).getTime()
-      },
-      render: (vehicle) => {
-        if (vehicle.technicalReviewExpiration === null || !isDate(vehicle.technicalReviewExpiration)) {
-          return 'No registrado'
-        }
+    //     return new Date(aTechnicalReviewExpiration).getTime() - new Date(bTechnicalReviewExpiration).getTime()
+    //   },
+    //   render: (vehicle) => {
+    //     if (vehicle.technicalReviewExpiration === null || !isDate(vehicle.technicalReviewExpiration)) {
+    //       return 'No registrado'
+    //     }
 
-        return new Date(vehicle.technicalReviewExpiration).toDateString()
-      }
-    },
+    //     return new Date(vehicle.technicalReviewExpiration).toDateString()
+    //   }
+    // },
     {
       id: 'vehicleType',
-      columnName: 'Tipo de vehículo',
+      columnName: 'Tipo de unidad',
       filterFunc: (vehicle) => vehicle.vehicleType.name,
       sortFunc: (a, b) => a.vehicleType.name > b.vehicleType.name ? 1 : -1,
       render: (vehicle) => vehicle.vehicleType.name.toUpperCase()

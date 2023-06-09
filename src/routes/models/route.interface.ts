@@ -12,6 +12,14 @@ export interface Route {
   checked: boolean
   doubleLicensePlate: boolean
   isFull: boolean
+
+  userCompany: string
+  vehicleCompany: string
+  vehicleContractor: string
+  vehicleSponsor: string
+  vehicleOwner: string
+  differentOwner: boolean
+
   vehicles: Vehicle[]
   reports: Report[]
   routeProfiles: RouteProfile[]
@@ -31,6 +39,12 @@ export const ROUTE_INITIAL_STATE: Route = {
   materialType: '',
   name: '',
   code: '',
+  userCompany: '',
+  vehicleCompany: '',
+  vehicleContractor: '',
+  vehicleSponsor: '',
+  vehicleOwner: '',
+  differentOwner: false,
   checked: false,
   doubleLicensePlate: false,
   isFull: false,

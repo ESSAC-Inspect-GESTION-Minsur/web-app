@@ -2,7 +2,6 @@ import React, { useContext, type ReactElement } from 'react'
 import { DriverContext } from '../contexts/DriverContext'
 import Table, { type Action, type Column } from '@/shared/ui/components/table/Table'
 import { type Profile } from '@/profiles/models/profile.interface'
-import { isDate } from '@/shared/utils'
 import EyeIcon from '@/shared/ui/assets/icons/EyeIcon'
 import { ProfilesService } from '@/profiles/services/profile.service'
 import { toast } from 'react-toastify'
@@ -77,37 +76,43 @@ const DriverTable = (): ReactElement => {
       }
     },
     {
-      id: 'licenseExpiration',
-      columnName: 'Vencimiento Licencia',
+      id: 'companies',
+      columnName: 'Empresa de Transporte',
       filterFunc: (driver) => {
-        if (!driver.licenseExpiration) {
-          return 'No registrado'
-        }
-        return isDate(driver.licenseExpiration) ? new Date(driver.licenseExpiration).toDateString() : 'No registrado'
-      },
-      sortFunc: (a, b) => {
-        const aSoatExpiration = a.licenseExpiration ?? 'No registrado'
-        const bSoatExpiration = b.licenseExpiration ?? 'No registrado'
-
-        if (isNaN(Date.parse(aSoatExpiration)) && isNaN(Date.parse(bSoatExpiration))) {
-          return aSoatExpiration > bSoatExpiration ? 1 : -1
+        if (driver.companies.length === 0) {
+          return 'No hay empresas asignadas'
         }
 
-        return new Date(aSoatExpiration).getTime() - new Date(bSoatExpiration).getTime()
+        return driver.companies.join(', ')
       },
       render: (driver) => {
-        if (driver.licenseExpiration === null || !isDate(driver.licenseExpiration)) {
-          return 'No registrado'
+        const companies = driver.companies
+
+        if (companies.length <= 0) {
+          return 'No hay empresas'
         }
 
-        return new Date(driver.licenseExpiration).toDateString()
+        const filteredArray = companies.filter(
+          (obj, index, self) => index === self.findIndex((o) => o.id === obj.id)
+        )
+
+        return (
+          <select className='block w-full h-10 px-2 rounded-t-md border-b border-solid border-blue-dark outline-none capitalize'>
+            {
+              ...filteredArray.map((driver) => (
+                <option key={driver.id}>{driver.name}</option>
+              ))
+            }
+          </select>
+        )
       }
+
     }
   ]
 
   const ACTIONS: Array<Action<Profile>> = [
     {
-      icon: () => (<EyeIcon className='cursor-pointer w-5 h-5'/>),
+      icon: () => (<EyeIcon className='cursor-pointer w-5 h-5' />),
       actionFunc: handleShowDriver
     },
     {
