@@ -1,4 +1,6 @@
-import React, { useEffect, type ChangeEvent, type ReactElement } from 'react'
+import React, { useEffect, type ChangeEvent, type ReactElement, useState, useMemo, useRef } from 'react'
+import ArrowDown from '../assets/icons/ArrowDown'
+import { ArrowUp } from '../assets/icons/ArrowUp'
 
 interface SelectInputProps<T> {
   name: string
@@ -7,12 +9,18 @@ interface SelectInputProps<T> {
   value: string
   valueKey?: keyof T
   optionKey?: keyof T
-  setValue: (name: string, value: string) => void
   disabled?: boolean
   className?: string
+
+  searchable?: boolean
+  setValue: (name: string, value: string) => void
 }
 
-const SelectInput = <T,>({ name, label, objects, value, valueKey, optionKey, setValue, disabled = false, className = '' }: SelectInputProps<T>): ReactElement => {
+const SelectInput = <T,>({ name, label, objects, value, valueKey, optionKey, disabled = false, className = '', searchable = false, setValue }: SelectInputProps<T>): ReactElement => {
+  const [searchItem, setSearchItem] = useState<string>('')
+  const [showOptions, setShowOptions] = useState<boolean>(false)
+  const selectRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     if (objects.length === 0) return
 
@@ -20,33 +28,132 @@ const SelectInput = <T,>({ name, label, objects, value, valueKey, optionKey, set
     setValue(name, String(aux))
   }, [])
 
-  const handleChange = (event: ChangeEvent<HTMLSelectElement>): void => {
-    setValue(name, event.target.value)
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    setSearchItem(event.target.value)
+  }
+
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent): void => {
+      if (
+        selectRef.current &&
+        !selectRef.current.contains(event.target as Node)
+      ) {
+        setShowOptions(false)
+      }
+    }
+
+    window.addEventListener('click', handleOutsideClick)
+
+    return () => {
+      window.removeEventListener('click', handleOutsideClick)
+    }
+  }, [])
+
+  const isObject = useMemo(() => {
+    if (objects.length === 0) return false
+
+    return typeof objects[0] === 'object'
+  }, [objects])
+
+  const filteredOptions = useMemo(() => {
+    return objects.filter((object) => {
+      const option = isObject && object && optionKey ? object[optionKey] : object
+
+      return String(option).toLowerCase().includes(searchItem.toLowerCase())
+    })
+  }, [objects, searchItem])
+
+  const selectedOption: string | null = useMemo(() => {
+    const object = objects.find((object) => {
+      const objectValue = isObject && object && valueKey ? object[valueKey] : object
+
+      return String(objectValue) === value
+    })
+
+    if (object === undefined) return null
+
+    return isObject && object && optionKey ? String(object[optionKey]) : String(object)
+  }, [objects, value])
+
+  const highlightSearchTerm = (label: string): React.ReactNode => {
+    if (searchItem.trim() === '') {
+      return label.toLowerCase()
+    }
+
+    const regex = new RegExp(`(${searchItem})`, 'gi')
+    const parts = label.split(regex)
+
+    return (
+      <span>
+        {parts.map((part, index) =>
+          regex.test(part)
+            ? (
+              <strong key={index}>{part}</strong>
+              )
+            : (
+              <span key={index}>{part}</span>
+              )
+        )}
+      </span>
+    )
   }
 
   return (
-    <div className={`flex flex-col gap-2 mb-2 ${className}`}>
+    <div className={`mb-2 ${className}`} ref={selectRef}>
       <label htmlFor={name}>{label}</label>
-      <select
-        className='capitalize block w-full h-10 px-2 border border-gray-300 rounded-md border-solid outline-none focus:shadow-blue focus:shadow-input-focus'
-        name={name} id={name} value={value} onChange={handleChange} disabled={disabled}>
+      <div
+        onClick={() => {
+          if (!disabled) { setShowOptions(!showOptions) }
+        }}
+        className={`cursor-pointer capitalize w-full h-10 px-2 border border-gray-300 border-solid flex flex-col justify-center ${selectedOption == null ? 'text-blue' : ''} ${showOptions ? 'rounded-tl-md rounded-tr-md' : 'rounded-md '}`}>
+
+        <div className='flex justify-between items-center'>
+          <p>{selectedOption ?? label}</p>
+          <ArrowUp className={`w-6 h-6 ${!showOptions ? 'hidden' : ''}`} />
+          <ArrowDown className={`w-6 h-6 ${showOptions ? 'hidden' : ''}`} />
+        </div>
+      </div>
+      <div className='relative'>
         {
-          objects.map((object) => {
-            const isObject = typeof object === 'object'
-            const value = isObject && object && valueKey ? object[valueKey] : object
-            const option = isObject && object && optionKey ? object[optionKey] : object
+          showOptions && (
+            <div className='absolute z-10 w-full bg-white border border-gray-400 max-h-36 overflow-y-auto max-w-full overflow-x-hidden rounded-br-md rounded-bl-md'>
+              {
+                searchable && (
+                  <input
+                    type="text"
+                    className="w-full text-gray-600 py-1 pr-10 pl-3 focus:outline-none border-b-[1px] border-gray-300"
+                    placeholder="Search..."
+                    value={searchItem}
+                    onChange={handleInputChange}
+                  />
+                )
+              }
+              {
+                ...filteredOptions.map((object) => {
+                  const isObject = typeof object === 'object'
+                  const objectValue = isObject && object && valueKey ? object[valueKey] : object
+                  const option = isObject && object && optionKey ? object[optionKey] : object
 
-            return (
-              <option
-                key={String(value)}
-                value={String(value)}
-                >{String(option)}</option>
-            )
-          })
+                  const selected = String(value) === objectValue
+
+                  return (
+                    <p
+                      key={String(objectValue)}
+                      className={`capitalize block w-full px-2 py-1 cursor-pointer ${selected ? 'bg-blue text-white' : 'hover:bg-gray-200'}`}
+                      onClick={() => {
+                        setValue(name, String(objectValue))
+                        setSearchItem('')
+                        setShowOptions(false)
+                      }}
+                    >{highlightSearchTerm(String(option).toLowerCase())}</p>
+                  )
+                })
+              }
+            </div>
+          )
         }
-      </select>
+      </div>
     </div>
-
   )
 }
 

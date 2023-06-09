@@ -96,6 +96,7 @@ const AssignFieldForm = ({ group, groupFields, onSuccess, close }: AssignFieldFo
           value={groupField.fieldId}
           optionKey='name'
           valueKey='id'
+          searchable={true}
         />
         {hasMaxLength && (
           <Input
