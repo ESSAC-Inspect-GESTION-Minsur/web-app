@@ -1,4 +1,4 @@
-import React, { useContext, type ReactElement } from 'react'
+import React, { useContext, type ReactElement, useMemo } from 'react'
 import { toast } from 'react-toastify'
 import Table, { type Action, type Column } from '@/shared/ui/components/table/Table'
 import DeleteIcon from '@/shared/ui/assets/icons/DeleteIcon'
@@ -59,150 +59,110 @@ const VehiclesTable = ({ areCarts, toggleShowForm, toggleShowDetail, toggleAssig
     toggleAssignContractor()
   }
 
-  const VEHICLE_COLUMNS: Array<Column<Vehicle>> = [
-    {
-      id: 'licensePlate',
-      columnName: 'Placa',
-      filterFunc: (vehicle) => vehicle.licensePlate,
-      sortFunc: (a, b) => a.licensePlate > b.licensePlate ? 1 : -1,
-      render: (vehicle) => vehicle.licensePlate
-    },
-    {
-      id: 'companies',
-      columnName: 'Empresas de transporte',
-      filterFunc: (vehicle) => vehicle.companies.map(company => company.name).join(' '),
-      render: (vehicle) => {
-        const companies = vehicle.companies
-
-        if (companies.length <= 0) {
-          return 'No hay empresas asignadas'
-        }
-
-        const filteredArray = companies.filter(
-          (obj, index, self) => index === self.findIndex((o) => o.id === obj.id)
-        )
-
-        return (
-          <select className='block w-full h-10 px-2 rounded-t-md border-b border-solid border-blue-dark outline-none capitalize'>
-            {
-              ...filteredArray.map((company) => (
-                <option key={company.id}>{company.name}</option>
-              ))
-            }
-          </select>
-        )
-      }
-    },
-    {
-      id: 'sponsors',
-      columnName: 'Sponsors',
-      filterFunc: (vehicle) => vehicle.sponsors.map(company => company.name).join(' '),
-      render: (vehicle) => {
-        const sponsors = vehicle.sponsors
-
-        if (sponsors.length <= 0) {
-          return 'No hay empresas contratantes asignadas'
-        }
-
-        const filteredArray = sponsors.filter(
-          (obj, index, self) => index === self.findIndex((o) => o.id === obj.id)
-        )
-
-        return (
-          <select className='block w-full h-10 px-2 rounded-t-md border-b border-solid border-blue-dark outline-none capitalize'>
-            {
-              ...filteredArray.map((company) => (
-                <option key={company.id}>{company.name}</option>
-              ))
-            }
-          </select>
-        )
-      }
-    },
-    // {
-    //   id: 'soatExpiration',
-    //   columnName: 'F. Venc. Soat',
-    //   filterFunc: (vehicle) => {
-    //     if (!vehicle.soatExpiration) {
-    //       return 'No registrado'
-    //     }
-    //     return isDate(vehicle.soatExpiration) ? new Date(vehicle.soatExpiration).toDateString() : 'No registrado'
-    //   },
-    //   sortFunc: (a, b) => {
-    //     const aSoatExpiration = a.soatExpiration ?? 'No registrado'
-    //     const bSoatExpiration = b.soatExpiration ?? 'No registrado'
-
-    //     if (isNaN(Date.parse(aSoatExpiration)) && isNaN(Date.parse(bSoatExpiration))) {
-    //       return aSoatExpiration > bSoatExpiration ? 1 : -1
-    //     }
-
-    //     return new Date(aSoatExpiration).getTime() - new Date(bSoatExpiration).getTime()
-    //   },
-    //   render: (vehicle) => {
-    //     if (vehicle.soatExpiration === null || !isDate(vehicle.soatExpiration)) {
-    //       return 'No registrado'
-    //     }
-
-    //     return new Date(vehicle.soatExpiration).toDateString()
-    //   }
-    // },
-    // {
-    //   id: 'technicalReviewExpiration',
-    //   columnName: 'F. Venc. Revisión Técnica',
-    //   filterFunc: (vehicle) => {
-    //     if (!vehicle.technicalReviewExpiration) {
-    //       return 'No registrado'
-    //     }
-    //     return isDate(vehicle.technicalReviewExpiration) ? new Date(vehicle.technicalReviewExpiration).toDateString() : 'No registrado'
-    //   },
-    //   sortFunc: (a, b) => {
-    //     const aTechnicalReviewExpiration = a.technicalReviewExpiration ?? 'No registrado'
-    //     const bTechnicalReviewExpiration = b.technicalReviewExpiration ?? 'No registrado'
-
-    //     if (isNaN(Date.parse(aTechnicalReviewExpiration)) && isNaN(Date.parse(bTechnicalReviewExpiration))) {
-    //       return aTechnicalReviewExpiration > bTechnicalReviewExpiration ? 1 : -1
-    //     }
-
-    //     return new Date(aTechnicalReviewExpiration).getTime() - new Date(bTechnicalReviewExpiration).getTime()
-    //   },
-    //   render: (vehicle) => {
-    //     if (vehicle.technicalReviewExpiration === null || !isDate(vehicle.technicalReviewExpiration)) {
-    //       return 'No registrado'
-    //     }
-
-    //     return new Date(vehicle.technicalReviewExpiration).toDateString()
-    //   }
-    // },
-    {
-      id: 'vehicleType',
-      columnName: 'Tipo de unidad',
-      filterFunc: (vehicle) => vehicle.vehicleType.name,
-      sortFunc: (a, b) => a.vehicleType.name > b.vehicleType.name ? 1 : -1,
-      render: (vehicle) => vehicle.vehicleType.name.toUpperCase()
-    },
-    {
-      id: 'brand',
-      columnName: 'Marca',
-      filterFunc: (vehicle) => vehicle.brand ?? 'No registrado',
-      sortFunc: (a, b) => {
-        const brandA = a.brand ?? 'No registrado'
-        const brandB = b.brand ?? 'No registrado'
-        return brandA > brandB ? 1 : -1
+  const VEHICLE_COLUMNS: Array<Column<Vehicle>> = useMemo(() => {
+    const columns: Array<Column<Vehicle>> = [
+      {
+        id: 'licensePlate',
+        columnName: 'Placa',
+        filterFunc: (vehicle) => vehicle.licensePlate,
+        sortFunc: (a, b) => a.licensePlate > b.licensePlate ? 1 : -1,
+        render: (vehicle) => vehicle.licensePlate
       },
-      render: (vehicle) => vehicle.brand ?? 'No registrado'
-    },
-    {
-      id: 'model',
-      columnName: 'Modelo',
-      filterFunc: (vehicle) => vehicle.model ?? 'No registrado',
-      sortFunc: (a, b) => {
-        const modelA = a.model ?? 'No registrado'
-        const modelB = b.model ?? 'No registrado'
-        return modelA > modelB ? 1 : -1
+      {
+        id: 'companies',
+        columnName: 'Empresas de transporte',
+        filterFunc: (vehicle) => vehicle.companies.map(company => company.name).join(' '),
+        render: (vehicle) => {
+          const companies = vehicle.companies
+
+          if (companies.length <= 0) {
+            return 'No hay empresas asignadas'
+          }
+
+          const filteredArray = companies.filter(
+            (obj, index, self) => index === self.findIndex((o) => o.id === obj.id)
+          )
+
+          return (
+            <select className='block w-full h-10 px-2 rounded-t-md border-b border-solid border-blue-dark outline-none capitalize'>
+              {
+                ...filteredArray.map((company) => (
+                  <option key={company.id}>{company.name}</option>
+                ))
+              }
+            </select>
+          )
+        }
+      }
+    ]
+
+    const sponsorColumn: Array<Column<Vehicle>> = [
+      {
+        id: 'sponsors',
+        columnName: 'Sponsors',
+        filterFunc: (vehicle) => vehicle.sponsors.map(company => company.name).join(' '),
+        render: (vehicle) => {
+          const sponsors = vehicle.sponsors
+
+          if (sponsors.length <= 0) {
+            return 'No hay empresas contratantes asignadas'
+          }
+
+          const filteredArray = sponsors.filter(
+            (obj, index, self) => index === self.findIndex((o) => o.id === obj.id)
+          )
+
+          return (
+            <select className='block w-full h-10 px-2 rounded-t-md border-b border-solid border-blue-dark outline-none capitalize'>
+              {
+                ...filteredArray.map((company) => (
+                  <option key={company.id}>{company.name}</option>
+                ))
+              }
+            </select>
+          )
+        }
+      }
+    ]
+
+    const restColumns: Array<Column<Vehicle>> = [
+      {
+        id: 'vehicleType',
+        columnName: 'Tipo de unidad',
+        filterFunc: (vehicle) => vehicle.vehicleType.name,
+        sortFunc: (a, b) => a.vehicleType.name > b.vehicleType.name ? 1 : -1,
+        render: (vehicle) => vehicle.vehicleType.name.toUpperCase()
       },
-      render: (vehicle) => vehicle.model ?? 'No registrado'
-    }
-  ]
+      {
+        id: 'brand',
+        columnName: 'Marca',
+        filterFunc: (vehicle) => vehicle.brand ?? 'No registrado',
+        sortFunc: (a, b) => {
+          const brandA = a.brand ?? 'No registrado'
+          const brandB = b.brand ?? 'No registrado'
+          return brandA > brandB ? 1 : -1
+        },
+        render: (vehicle) => vehicle.brand ?? 'No registrado'
+      },
+      {
+        id: 'model',
+        columnName: 'Modelo',
+        filterFunc: (vehicle) => vehicle.model ?? 'No registrado',
+        sortFunc: (a, b) => {
+          const modelA = a.model ?? 'No registrado'
+          const modelB = b.model ?? 'No registrado'
+          return modelA > modelB ? 1 : -1
+        },
+        render: (vehicle) => vehicle.model ?? 'No registrado'
+      }
+    ]
+
+    return [
+      ...columns,
+      ...(areCarts ? sponsorColumn : []),
+      ...restColumns
+    ]
+  }, [areCarts])
 
   const PAGINATION = [5, 10, 20]
 
