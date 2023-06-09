@@ -159,7 +159,7 @@ const VehiclesTable = ({ areCarts, toggleShowForm, toggleShowDetail, toggleAssig
 
     return [
       ...columns,
-      ...(areCarts ? sponsorColumn : []),
+      ...(!areCarts ? sponsorColumn : []),
       ...restColumns
     ]
   }, [areCarts])
