@@ -1,6 +1,9 @@
+import { type Project } from './project.interface'
+
 export interface Sponsor {
   id: string
   name: string
+  project: Project | null
 
   createdAt: string
   updatedAt: string
@@ -14,6 +17,7 @@ export interface SponsorDto extends Pick<Sponsor, 'name'> {
 export const SPONSOR_INITIAL_STATE: Sponsor = {
   id: '',
   name: '',
+  project: null,
   createdAt: '',
   updatedAt: '',
   active: false

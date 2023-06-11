@@ -116,7 +116,7 @@ const VehiclesTable = ({ areCarts, toggleShowForm, toggleShowDetail, toggleAssig
             <select className='block w-full h-10 px-2 rounded-t-md border-b border-solid border-blue-dark outline-none capitalize'>
               {
                 ...filteredArray.map((company) => (
-                  <option key={company.id}>{company.name}</option>
+                  <option key={company.id}>{company.project?.name }-{company.name}</option>
                 ))
               }
             </select>

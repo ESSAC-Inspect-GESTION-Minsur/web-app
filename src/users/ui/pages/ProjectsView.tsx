@@ -8,6 +8,7 @@ import { ProjectContext } from '../contexts/ProjectContext'
 import ProjectsDetail from '../components/projects/ProjectsDetail'
 import ProjectForm from '../components/projects/ProjectForm'
 import SponsorsComponent from '../components/sponsors/SponsorsComponent'
+import ReportTypeGroupsComponent from '../components/report-type-group/ReportTypeGroupComponent'
 
 const TOAST_ID = 'reports'
 
@@ -56,7 +57,10 @@ const ProjectsView = (): ReactElement => {
         </main>
 
         <div className='w-full border-t border-solid border-gray-light my-3 sm:hidden'></div>
-        <SponsorsComponent />
+        <div>
+          <SponsorsComponent />
+          <ReportTypeGroupsComponent />
+        </div>
       </div>
 
       <Toast id={TOAST_ID}></Toast>
