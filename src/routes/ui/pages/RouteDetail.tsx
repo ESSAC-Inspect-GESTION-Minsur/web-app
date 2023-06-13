@@ -85,6 +85,11 @@ const RouteDetail = (): ReactElement => {
     return driver?.profile.fullName ?? 'No hay conductor'
   }
 
+  const findSupervisorFullName = (): string => {
+    const supervisor = route.routeProfiles.find((routeProfile) => routeProfile.role.toUpperCase() === 'SUPERVISOR')
+    return supervisor?.profile.fullName ?? 'No hay conductor'
+  }
+
   const exportPdf = (): void => {
     setIsPdfLoading(true)
     const routePDFService = new RoutePDFServices()
@@ -166,7 +171,7 @@ const RouteDetail = (): ReactElement => {
             <p className='uppercase py-3 px-2'>Inspector</p>
           </div>
           <div className='w-[50%] border-r-[1px] border-black'>
-            <p className='py-3 px-2'>Juan Perez</p>
+            <p className='py-3 px-2'>{findSupervisorFullName()}</p>
           </div>
           <div className='w-[10%] border-r-[1px] border-black bg-blue-dark text-white text-center'>
             <p className='uppercase py-3 px-2'>Fecha</p>
@@ -198,7 +203,7 @@ const RouteDetail = (): ReactElement => {
             <div className='border-b-[1px] border-black'>
               <div className='p-2 flex gap-5'>
                 <p>3. Placa de Remolque / Semirremolque:</p>
-                <p>{route.doubleLicensePlate ? cart?.licensePlate : 'NO APLICA'}</p>
+                <p>{route.doubleLicensePlate ? cart ? cart.licensePlate : 'NO APLICA' : 'NO APLICA'}</p>
               </div>
             </div>
             <div className=''>
@@ -258,22 +263,26 @@ const RouteDetail = (): ReactElement => {
                         return (
                           <div key={fieldReport.fieldId} className='flex'>
 
-                            <div className='py-1 w-[10%] text-center grid items-center'>
+                            <div className='py-2 w-[10%] text-center grid items-center'>
                               <p>{fieldReport.isCritical && 'X'}</p>
                             </div>
-                            <div className='py-1 w-[10%] text-center grid items-center border-l-[1px] border-black'>
+                            <div className='py-2 w-[10%] text-center grid items-center border-l-[1px] border-black'>
                               <p>{!fieldReport.isCritical && 'X'}</p>
                             </div>
-                            <div className='py-1 w-[65%] grid items-center border-l-[1px] border-black'>
+                            <div className='py-2 w-[65%] grid items-center border-l-[1px] border-black'>
                               <div className='flex gap-3'>
-                                <p className='py-1 px-2 font-semibold w-1/3'>{fieldReport.field.name}</p>
+                                <p className='py-2 px-2 font-semibold'>{fieldReport.field.name}</p>
                                 {fieldReport.imageEvidence !== '' && <EyeIcon className='w-6 h-6 cursor-pointer transition-all hover:text-red' onClick={() => { imageEvidenceOnClick(fieldReport.imageEvidence, fieldReport.field.name) }}></EyeIcon>}
                               </div>
                             </div>
                             <div className='w-[15%] flex text-center border-l-[1px] border-black'>
-                              <p className='py-1 w-[33.3%]'>{fieldReport.value.toUpperCase() === 'SI' && 'x'}</p>
-                              <p className='py-1 w-[33.3%] border-l-[1px] border-black'>{fieldReport.value.toUpperCase() === 'NO' && 'x'}</p>
-                              <p className='py-1 w-[33.3%] border-l-[1px] border-black'>{fieldReport.value.toUpperCase() === 'NO APLICA' && 'x'}</p>
+                              <p className='py-2 w-[33.3%] self-center'>{fieldReport.value.toUpperCase() === 'SI' && 'x'}</p>
+                              <div className='py-2 w-[33.3%] border-l-[1px] border-black flex justify-center'>
+                                <p className='self-center'>{fieldReport.value.toUpperCase() === 'NO' && 'x'}</p>
+                              </div>
+                              <div className='py-2 w-[33.3%] border-l-[1px] border-black flex justify-center'>
+                                <p className='self-center'>{fieldReport.value.toUpperCase() === 'NO APLICA' && 'x'}</p>
+                              </div>
                             </div>
                           </div>
                         )
