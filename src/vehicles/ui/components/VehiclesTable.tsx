@@ -166,28 +166,38 @@ const VehiclesTable = ({ areCarts, toggleShowForm, toggleShowDetail, toggleAssig
 
   const PAGINATION = [5, 10, 20]
 
-  const VEHICLE_ACTIONS: Array<Action<Vehicle>> = [
-    {
-      icon: () => (<EditIcon className='cursor-pointer w-5 h-5' />),
-      actionFunc: handleUpdate
-    },
-    {
-      icon: () => (<DeleteIcon className='cursor-pointer w-5 h-5 text-red' />),
-      actionFunc: handleRemove
-    },
-    // {
-    //   icon: () => (<EyeIcon className='cursor-pointer w-5 h-5 ' />),
-    //   actionFunc: handleView
-    // },
-    {
-      icon: () => (<AdminIcon className='cursor-pointer w-5 h-5 text-blue' />),
-      actionFunc: assignCompany
-    },
-    {
-      icon: () => (<AdminIcon className='cursor-pointer w-5 h-5 ' />),
-      actionFunc: assignContractor
-    }
-  ]
+  const VEHICLE_ACTIONS: Array<Action<Vehicle>> = useMemo(() => {
+    const mainActions = [
+      {
+        icon: () => (<EditIcon className='cursor-pointer w-5 h-5' />),
+        actionFunc: handleUpdate
+      },
+      {
+        icon: () => (<DeleteIcon className='cursor-pointer w-5 h-5 text-red' />),
+        actionFunc: handleRemove
+      },
+      // {
+      //   icon: () => (<EyeIcon className='cursor-pointer w-5 h-5 ' />),
+      //   actionFunc: handleView
+      // },
+      {
+        icon: () => (<AdminIcon className='cursor-pointer w-5 h-5 text-blue' />),
+        actionFunc: assignCompany
+      }
+    ]
+
+    const contractorActions = [
+      {
+        icon: () => (<AdminIcon className='cursor-pointer w-5 h-5 ' />),
+        actionFunc: assignContractor
+      }
+    ]
+
+    return [
+      ...mainActions,
+      ...(areCarts ? contractorActions : [])
+    ]
+  }, [areCarts])
 
   return (
     <main>
