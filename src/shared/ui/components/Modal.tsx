@@ -4,47 +4,46 @@ import React, { Fragment, type ReactElement } from 'react'
 interface ModalProps {
   isOpen: boolean
   onClose: () => void
-  onTop?: boolean
-  className?: string
   children?: React.ReactNode
+  className?: string
+  onTop?: boolean
 }
 
-const Modal = ({ isOpen, onClose, className = '', onTop = false, children }: ModalProps): ReactElement => {
+const Modal = ({ isOpen, onClose, children, className = '', onTop = false }: ModalProps): ReactElement => {
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={onClose}>
-        <Transition.Child
-          as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div className="fixed inset-0 bg-black bg-opacity-25" />
-        </Transition.Child>
+        <Dialog as="div" className="relative z-10" onClose={onClose}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
 
-        {isOpen && <div className="fixed inset-0 overflow-y-auto">
-          <div className={`flex ${!onTop ? 'min-h-full items-center' : ''} justify-center p-4 text-center`}>
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className={`flex ${onTop ? '' : 'min-h-full'} w-full items-center justify-center p-4 text-center`}>
             <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
-            >
-              <Dialog.Panel className={`w-full max-w-lg transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all ${className}`}>
-                {children}
-              </Dialog.Panel>
-            </Transition.Child>
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className={`w-full max-w-lg transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all ${className}`}>
+                  {children}
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
           </div>
-        </div>}
-      </Dialog>
-    </Transition>
-
+        </Dialog>
+      </Transition>
   )
 }
 
