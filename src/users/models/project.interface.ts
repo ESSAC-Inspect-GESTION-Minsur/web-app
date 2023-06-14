@@ -1,9 +1,11 @@
+import { type ReportTypeGroup } from '@/reports/models/report-type-group.interface'
 import { type Sponsor } from './sponsor.interface'
 
 export interface Project {
   id: string
   name: string
   sponsors: Sponsor[]
+  reportTypeGroups: ReportTypeGroup[]
 
   createdAt: string
   updatedAt: string
@@ -16,6 +18,7 @@ export const PROJECT_INITIAL_STATE: Project = {
   id: '',
   name: '',
   sponsors: [],
+  reportTypeGroups: [],
   createdAt: '',
   updatedAt: '',
   active: false

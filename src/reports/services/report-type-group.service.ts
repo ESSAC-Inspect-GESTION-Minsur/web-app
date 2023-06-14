@@ -31,6 +31,16 @@ export class ReportTypeGroupService extends AppServices {
       .then(response => response.data)
   }
 
+  assignProject = async (id: string, projectId: string): Promise<ReportTypeGroup> => {
+    return await this.patch<ReportTypeGroup>(`/${id}/assign-project/${projectId}`)
+      .then(response => response.data)
+  }
+
+  removeProject = async (id: string): Promise<ReportTypeGroup> => {
+    return await this.patch<ReportTypeGroup>(`/${id}/remove-project`)
+      .then(response => response.data)
+  }
+
   update = async (group: ReportTypeGroupDto, id: string): Promise<ReportTypeGroup> => {
     return await this.patch<ReportTypeGroup>(`/${id}`, group)
       .then(response => response.data)
