@@ -195,7 +195,7 @@ const VehiclesTable = ({ areCarts, toggleShowForm, toggleShowDetail, toggleAssig
 
     return [
       ...mainActions,
-      ...(areCarts ? contractorActions : [])
+      ...(!areCarts ? contractorActions : [])
     ]
   }, [areCarts])
 
