@@ -58,7 +58,7 @@ const FieldForm = (): ReactElement => {
       })
       .catch(error => {
         const { message } = error.data
-        toast(message, { toastId, type: 'success' })
+        toast(message, { toastId, type: 'error' })
       })
       .finally(() => {
         setIsSubmitting(false)
