@@ -61,7 +61,7 @@ const RouteDetail = (): ReactElement => {
 
     fieldReports.forEach(fieldReport => {
       const groupId = fieldReport.group.id
-      const groupIndex = groups.findIndex(g => g.id === groupId)
+      const groupIndex = reportGroups.findIndex(g => g.id === groupId)
 
       if (groupIndex === -1) reportGroups.push({ id: groupId, name: fieldReport.group.name })
 
@@ -72,7 +72,20 @@ const RouteDetail = (): ReactElement => {
       }
     })
 
-    setFieldReports(fieldReportsMap)
+    const fieldReportsMapKeys = Array.from(fieldReportsMap.keys())
+    const fieldReportsMapSorted = new Map<string, FieldReport[]>()
+
+    fieldReportsMapKeys.forEach(key => {
+      const fieldReports = fieldReportsMap.get(key)
+
+      const reportGroup = reportGroups.find(group => group.id === key)
+
+      if (reportGroup) {
+        fieldReportsMapSorted.set(reportGroup.name, fieldReports ?? [])
+      }
+    })
+
+    setFieldReports(fieldReportsMapSorted)
     setGroups(reportGroups)
   }
 
@@ -230,8 +243,7 @@ const RouteDetail = (): ReactElement => {
         </div>
         <div className='uppercase'>
           {
-            Array.from(fieldReports.entries()).sort((a, b) => a[0] > b[0] ? 1 : -1).map(([key, value], index) => {
-              const group = groups.find((g) => g.id === key)
+            Array.from(fieldReports.entries()).sort((a, b) => a[0].localeCompare(b[0])).map(([key, value], index) => {
               return (
                 <div
                   key={key}
@@ -246,7 +258,7 @@ const RouteDetail = (): ReactElement => {
                         <p>Normal</p>
                       </div>
                       <div className='w-[65%] grid items-center border-l-[1px] border-white'>
-                        <p className='px-2'>2.{index + 1}. {group?.name.toUpperCase()}</p>
+                        <p className='px-2'>2.{key.toUpperCase()}</p>
                       </div>
                       <div className='w-[15%] flex flex-col gap-2 border-l-[1px] border-white'>
                         <p className='text-center'>cumple</p>
