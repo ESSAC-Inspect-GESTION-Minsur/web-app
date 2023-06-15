@@ -47,6 +47,12 @@ const UserDetail = ({ toggleForm, toggleAssignSponsorModal }: UserDetailProps): 
       <Divider />
 
       {
+        selectedUser && selectedUser.sponsors.length === 0 && (
+          <p className='font-bold'>Empresa: <span className='font-normal'>ESSAC</span></p>
+        )
+      }
+
+      {
         selectedUser && selectedUser.sponsors.length > 0 && (
           <div>
             <p className='font-semibold uppercase'>Sponsors:</p>
@@ -57,14 +63,13 @@ const UserDetail = ({ toggleForm, toggleAssignSponsorModal }: UserDetailProps): 
                 ))
               }
             </ul>
-
           </div>
         )
       }
 
       <div className='mt-4 flex gap-3 justify-end'>
         <Button color='secondary' onClick={handleEdit}>Editar</Button>
-        <Button color='secondary' onClick={toggleAssignSponsorModal}>Asignar Sponsor</Button>
+        {/* <Button color='secondary' onClick={toggleAssignSponsorModal}>Asignar Sponsor</Button> */}
       </div>
     </section>
   )

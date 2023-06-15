@@ -35,6 +35,7 @@ const UserFormModal = ({ isOpen, onClose }: UserFormModalProps): ReactElement =>
   const [formAction, setFormAction] = useState<FormAction>('add')
 
   const [isLoading, , setIsLoading] = useBooleanState()
+  const [hasSponsors, setHasSponsors] = useState<boolean>(true)
 
   // const sponsorRef = useRef<HTMLSelectElement>(null)
 
@@ -44,6 +45,8 @@ const UserFormModal = ({ isOpen, onClose }: UserFormModalProps): ReactElement =>
       resetUser()
       resetProfile()
     }
+
+    setHasSponsors(true)
 
     onClose()
   }
@@ -99,6 +102,15 @@ const UserFormModal = ({ isOpen, onClose }: UserFormModalProps): ReactElement =>
   }, [userForm, isOpen])
 
   useEffect(() => {
+    if (!hasSponsors) {
+      setUser({
+        ...user,
+        sponsorId: ''
+      })
+
+      return
+    }
+
     const sponsors = selectedProject.sponsors
     if (sponsors.length === 0) return
 
@@ -106,7 +118,7 @@ const UserFormModal = ({ isOpen, onClose }: UserFormModalProps): ReactElement =>
       ...user,
       sponsorId: sponsors[0].id
     })
-  }, [selectedProject])
+  }, [selectedProject, hasSponsors])
 
   const finishSubmitting = (): void => {
     setUserForm(null)
@@ -205,9 +217,25 @@ const UserFormModal = ({ isOpen, onClose }: UserFormModalProps): ReactElement =>
             value={user.role}
             disabled={formAction === 'update'}
           />
-
           {
             formAction === 'add' && (
+              <Input
+                className='-ml-2 mt-2'
+                label='¿Pertenece a ESSAC?'
+                name='isEssac'
+                type='checkbox'
+                placeholder='¿Pertenece a ESSAC?'
+                setValue={(name, value) => {
+                  const isEssac = !value
+                  setHasSponsors(!isEssac)
+                }}
+                value={hasSponsors.toString()}
+              />
+            )
+          }
+
+          {
+            formAction === 'add' && hasSponsors && (
               <Fragment>
                 {
                   projects.length > 0 && (
