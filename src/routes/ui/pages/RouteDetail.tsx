@@ -143,7 +143,7 @@ const RouteDetail = (): ReactElement => {
 
             <div className='border-b-[1px] border-black'>
               <div className='px-2 flex gap-2 '>
-                <p>Codigo:</p>
+                <p>Código:</p>
                 <p >{route.code}</p>
               </div>
             </div>
@@ -152,14 +152,14 @@ const RouteDetail = (): ReactElement => {
             </div>
             <div className=''>
               <div className='flex gap-2 px-2'>
-                <p>Fecha de elaboracion</p>
+                <p>Fecha de elaboración</p>
                 <p>{new Date(route.createdAt).toLocaleDateString('Es-es', { year: 'numeric', month: '2-digit', day: '2-digit' })}</p>
               </div>
             </div>
           </div>
           <div className='w-[40%] flex flex-col border-r-[1px] border-black'>
             <div className='h-[65%] border-b-[1px] border-black grid place-items-center'>
-              <p className='text-center uppercase font-semibold'>Insepcción de {report.reportType.name}</p>
+              <p className='text-center uppercase font-semibold'>Inspección de {report.reportType.name}</p>
             </div>
             <div className='h-[30%] grid place-items-center'>
               <p className=''>Área: Seguridad y Salud Ocupacional</p>
