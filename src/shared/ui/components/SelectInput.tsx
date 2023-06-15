@@ -80,6 +80,16 @@ const SelectInput = <T,>({ name, label, objects, value, valueKey, optionKey, dis
     return isObject && optionKey ? String(object[optionKey]) : String(object)
   }, [objects, value])
 
+  useEffect(() => {
+    if (objects.length === 0 || selectedOption !== null) return
+
+    const object = objects[0]
+
+    const objectValue = isObject && object && valueKey ? object[valueKey] : object
+
+    setValue(name, String(objectValue))
+  }, [selectedOption])
+
   const highlightSearchTerm = (label: string): React.ReactNode => {
     if (searchItem.trim() === '') {
       return label
