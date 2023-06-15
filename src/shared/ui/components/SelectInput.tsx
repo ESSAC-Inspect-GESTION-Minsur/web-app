@@ -21,6 +21,18 @@ const SelectInput = <T,>({ name, label, objects, value, valueKey, optionKey, dis
   const [showOptions, setShowOptions] = useState<boolean>(false)
   const selectRef = useRef<HTMLDivElement>(null)
 
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const handleOptionClick = (): void => {
+    if (disabled) return
+
+    setShowOptions(!showOptions)
+  }
+
+  useEffect(() => {
+    inputRef.current?.focus()
+  }, [showOptions])
+
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setSearchItem(event.target.value)
   }
@@ -68,20 +80,13 @@ const SelectInput = <T,>({ name, label, objects, value, valueKey, optionKey, dis
     return isObject && optionKey ? String(object[optionKey]) : String(object)
   }, [objects, value])
 
-  useEffect(() => {
-    if (objects.length === 0 || selectedOption !== null) return
-
-    const aux = valueKey ? objects[0][valueKey] : objects[0]
-    setValue(name, String(aux))
-  }, [selectedOption])
-
   const highlightSearchTerm = (label: string): React.ReactNode => {
     if (searchItem.trim() === '') {
-      return label.toLowerCase()
+      return label
     }
 
-    const regex = new RegExp(`(${searchItem})`, 'gi')
-    const parts = label.split(regex)
+    const regex = new RegExp(`(${searchItem.toLowerCase()})`, 'gi')
+    const parts = label.toLowerCase().split(regex)
 
     return (
       <span>
@@ -102,10 +107,8 @@ const SelectInput = <T,>({ name, label, objects, value, valueKey, optionKey, dis
     <div className={`mb-2 ${className}`} ref={selectRef}>
       <label htmlFor={name}>{label}</label>
       <div
-        onClick={() => {
-          if (!disabled) { setShowOptions(!showOptions) }
-        }}
-        className={`cursor-pointer capitalize w-full h-10 px-2 border border-gray-300 border-solid flex flex-col justify-center ${selectedOption == null ? 'text-blue' : ''} ${showOptions ? 'rounded-tl-md rounded-tr-md' : 'rounded-md '} ${disabled ? 'bg-gray-200 text-gray-500' : ''}`}>
+        onClick={handleOptionClick}
+        className={`cursor-pointer w-full h-10 px-2 border border-gray-300 border-solid flex flex-col justify-center ${selectedOption == null ? 'text-blue' : ''} ${showOptions ? 'rounded-tl-md rounded-tr-md' : 'rounded-md '} ${disabled ? 'bg-gray-300 text-gray-500' : ''}`}>
 
         <div className='flex justify-between items-center'>
           <p>{selectedOption ?? label}</p>
@@ -120,6 +123,7 @@ const SelectInput = <T,>({ name, label, objects, value, valueKey, optionKey, dis
               {
                 searchable && (
                   <input
+                    ref={inputRef}
                     type="text"
                     className="w-full text-gray-600 py-1 pr-10 pl-3 focus:outline-none border-b-[1px] border-gray-300"
                     placeholder="Search..."
@@ -139,13 +143,13 @@ const SelectInput = <T,>({ name, label, objects, value, valueKey, optionKey, dis
                   return (
                     <p
                       key={String(objectValue)}
-                      className={`capitalize block w-full px-2 py-1 cursor-pointer ${selected ? 'bg-blue text-white' : 'hover:bg-gray-200'}`}
+                      className={`block w-full px-2 py-1 cursor-pointer ${selected ? 'bg-blue text-white' : 'hover:bg-gray-200'}`}
                       onClick={() => {
                         setValue(name, String(objectValue))
                         setSearchItem('')
                         setShowOptions(false)
                       }}
-                    >{highlightSearchTerm(String(option).toLowerCase())}</p>
+                    >{highlightSearchTerm(String(option))}</p>
                   )
                 })
               }
