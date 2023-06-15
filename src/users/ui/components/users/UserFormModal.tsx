@@ -90,8 +90,11 @@ const UserFormModal = ({ isOpen, onClose }: UserFormModalProps): ReactElement =>
   useEffect(() => {
     const sponsors = selectedProject.sponsors
     if (sponsors.length === 0) return
-    console.log(sponsors)
-    user.sponsorId = sponsors[0].id
+
+    setUser({
+      ...user,
+      sponsorId: sponsors[0].id
+    })
   }, [selectedProject])
 
   const finishSubmitting = (): void => {
