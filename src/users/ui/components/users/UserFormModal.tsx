@@ -123,8 +123,6 @@ const UserFormModal = ({ isOpen, onClose }: UserFormModalProps): ReactElement =>
     user.profile = profile
     user.company = 'MINSUR'
 
-    console.log(user)
-
     void usersService.create(user)
       .then((user) => {
         addUser(user)
