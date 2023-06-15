@@ -38,6 +38,16 @@ const UserFormModal = ({ isOpen, onClose }: UserFormModalProps): ReactElement =>
 
   // const sponsorRef = useRef<HTMLSelectElement>(null)
 
+  const handleOnClose = (): void => {
+    if (formAction === 'update') {
+      setUserForm(null)
+      resetUser()
+      resetProfile()
+    }
+
+    onClose()
+  }
+
   useEffect(() => {
     setIsLoading(false)
     if (formAction === 'update' || !isOpen) return
@@ -161,7 +171,7 @@ const UserFormModal = ({ isOpen, onClose }: UserFormModalProps): ReactElement =>
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} onTop={true} className='min-w-[600px]'>
+    <Modal isOpen={isOpen} onClose={handleOnClose} onTop={true} className='min-w-[600px]'>
       <div className='p-6'>
         <h1 className='uppercase text-center font-bold mb-4'>{formAction === 'add' ? 'Añadir' : 'Editar'} Usuario</h1>
         <form onSubmit={handleSubmit} className='flex flex-col'>
@@ -302,7 +312,7 @@ const UserFormModal = ({ isOpen, onClose }: UserFormModalProps): ReactElement =>
           }
 
           <div className='flex justify-center gap-5 mt-4'>
-            <Button color='secondary' onClick={onClose}>Cerrar</Button>
+            <Button color='secondary' onClick={handleOnClose}>Cerrar</Button>
             <Button color='primary' type='submit' isLoading={isLoading}>{formAction === 'add' ? 'Añadir' : 'Guardar'} Usuario</Button>
           </div>
         </form>
