@@ -35,7 +35,7 @@ const UserFormModal = ({ isOpen, onClose }: UserFormModalProps): ReactElement =>
   const [formAction, setFormAction] = useState<FormAction>('add')
 
   const [isLoading, , setIsLoading] = useBooleanState()
-  const [hasSponsors, setHasSponsors] = useState<boolean>(true)
+  const [isEssac, setIsEssac] = useState<boolean>(true)
 
   // const sponsorRef = useRef<HTMLSelectElement>(null)
 
@@ -46,7 +46,7 @@ const UserFormModal = ({ isOpen, onClose }: UserFormModalProps): ReactElement =>
       resetProfile()
     }
 
-    setHasSponsors(true)
+    setIsEssac(false)
 
     onClose()
   }
@@ -102,7 +102,7 @@ const UserFormModal = ({ isOpen, onClose }: UserFormModalProps): ReactElement =>
   }, [userForm, isOpen])
 
   useEffect(() => {
-    if (!hasSponsors) {
+    if (isEssac) {
       setUser({
         ...user,
         sponsorId: ''
@@ -118,7 +118,7 @@ const UserFormModal = ({ isOpen, onClose }: UserFormModalProps): ReactElement =>
       ...user,
       sponsorId: sponsors[0].id
     })
-  }, [selectedProject, hasSponsors])
+  }, [selectedProject, isEssac])
 
   const finishSubmitting = (): void => {
     setUserForm(null)
@@ -226,16 +226,15 @@ const UserFormModal = ({ isOpen, onClose }: UserFormModalProps): ReactElement =>
                 type='checkbox'
                 placeholder='¿Pertenece a ESSAC?'
                 setValue={(name, value) => {
-                  const isEssac = !value
-                  setHasSponsors(!isEssac)
+                  setIsEssac(!isEssac)
                 }}
-                value={hasSponsors.toString()}
+                value={isEssac.toString()}
               />
             )
           }
 
           {
-            formAction === 'add' && hasSponsors && (
+            formAction === 'add' && !isEssac && (
               <Fragment>
                 {
                   projects.length > 0 && (
