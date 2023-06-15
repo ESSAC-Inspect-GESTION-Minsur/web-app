@@ -10,6 +10,7 @@ import { ROUTE_INITIAL_STATE, type Route } from '@/routes/models/route.interface
 import { type FieldReport } from '@/fields/models/field-report.interface'
 import { type FieldGroup } from '@/fields/models/group.interface'
 import { type CheckpointGroup } from '@/checkpoints/models/checkpoint-group.interface'
+import ShowImageEvidence from '@/checkpoints/ui/components/ShowImageEvidence'
 
 interface FieldSelected {
   url: string
@@ -270,7 +271,7 @@ const RouteDetail = (): ReactElement => {
                               <p>{!fieldReport.isCritical && 'X'}</p>
                             </div>
                             <div className='py-2 w-[65%] grid items-center border-l-[1px] border-black'>
-                              <div className='flex gap-3'>
+                              <div className='flex items-center gap-3'>
                                 <p className='py-2 px-2 font-semibold'>{fieldReport.field.name}</p>
                                 {fieldReport.imageEvidence !== '' && <EyeIcon className='w-6 h-6 cursor-pointer transition-all hover:text-red' onClick={() => { imageEvidenceOnClick(fieldReport.imageEvidence, fieldReport.field.name) }}></EyeIcon>}
                               </div>
@@ -296,7 +297,7 @@ const RouteDetail = (): ReactElement => {
         </div>
       </div>
 
-      {/* {showImage && <ShowImageEvidence imageUrl={fieldSelected.url} name={fieldSelected.name} close={() => { setShowImage(false) }} />} */}
+      {showImage && <ShowImageEvidence isOpen={showImage} imageUrl={fieldSelected.url} name={fieldSelected.name} onClose={() => { setShowImage(false) }} />}
     </div>
 
   )

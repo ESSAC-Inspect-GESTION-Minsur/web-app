@@ -13,8 +13,8 @@ const ShowImageEvidence = ({ imageUrl, name, isOpen, onClose }: ShowImageEvidenc
   const [loading, setIsLoading] = useState<boolean>(true)
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <div className='w-[400px] pb-6'>
+    <Modal isOpen={isOpen} onClose={onClose} className='w-[400px] pb-6'>
+      <div>
         <div className='flex justify-end'>
           <Button color='secondary' onClick={onClose}>Close</Button>
         </div>
