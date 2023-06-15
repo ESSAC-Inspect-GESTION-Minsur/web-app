@@ -54,7 +54,7 @@ const UserFormModal = ({ isOpen, onClose }: UserFormModalProps): ReactElement =>
   }, [formAction, isOpen])
 
   useEffect(() => {
-    if (isLoading) return
+    if (!isOpen) return
 
     if (userForm === null) {
       setFormAction('add')
@@ -62,6 +62,7 @@ const UserFormModal = ({ isOpen, onClose }: UserFormModalProps): ReactElement =>
     }
 
     const { role, username, profile } = userForm
+    console.log({ role })
     setFormAction('update')
 
     setUser({
@@ -85,7 +86,7 @@ const UserFormModal = ({ isOpen, onClose }: UserFormModalProps): ReactElement =>
       licenseCategory: null,
       licenseExpiration: null
     })
-  }, [userForm, isLoading])
+  }, [userForm, isOpen])
 
   useEffect(() => {
     const sponsors = selectedProject.sponsors

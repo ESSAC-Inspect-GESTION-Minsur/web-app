@@ -21,13 +21,6 @@ const SelectInput = <T,>({ name, label, objects, value, valueKey, optionKey, dis
   const [showOptions, setShowOptions] = useState<boolean>(false)
   const selectRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    if (objects.length === 0) return
-
-    const aux = valueKey ? objects[0][valueKey] : objects[0]
-    setValue(name, String(aux))
-  }, [])
-
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setSearchItem(event.target.value)
   }
@@ -70,10 +63,17 @@ const SelectInput = <T,>({ name, label, objects, value, valueKey, optionKey, dis
       return String(objectValue) === value
     })
 
-    if (object === undefined) return null
+    if (object === undefined || object == null) return null
 
-    return isObject && object && optionKey ? String(object[optionKey]) : String(object)
+    return isObject && optionKey ? String(object[optionKey]) : String(object)
   }, [objects, value])
+
+  useEffect(() => {
+    if (objects.length === 0 || selectedOption !== null) return
+
+    const aux = valueKey ? objects[0][valueKey] : objects[0]
+    setValue(name, String(aux))
+  }, [selectedOption])
 
   const highlightSearchTerm = (label: string): React.ReactNode => {
     if (searchItem.trim() === '') {
@@ -105,7 +105,7 @@ const SelectInput = <T,>({ name, label, objects, value, valueKey, optionKey, dis
         onClick={() => {
           if (!disabled) { setShowOptions(!showOptions) }
         }}
-        className={`cursor-pointer capitalize w-full h-10 px-2 border border-gray-300 border-solid flex flex-col justify-center ${selectedOption == null ? 'text-blue' : ''} ${showOptions ? 'rounded-tl-md rounded-tr-md' : 'rounded-md '}`}>
+        className={`cursor-pointer capitalize w-full h-10 px-2 border border-gray-300 border-solid flex flex-col justify-center ${selectedOption == null ? 'text-blue' : ''} ${showOptions ? 'rounded-tl-md rounded-tr-md' : 'rounded-md '} ${disabled ? 'bg-gray-200 text-gray-500' : ''}`}>
 
         <div className='flex justify-between items-center'>
           <p>{selectedOption ?? label}</p>

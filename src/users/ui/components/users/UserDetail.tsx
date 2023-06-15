@@ -20,6 +20,7 @@ const UserDetail = ({ toggleForm, toggleAssignSponsorModal }: UserDetailProps): 
   }, [selectedUser])
 
   const handleEdit = (): void => {
+    console.log({ selectedUser })
     setUserForm(selectedUser)
     toggleForm()
   }
