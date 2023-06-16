@@ -61,7 +61,7 @@ const Home = (): ReactElement => {
   return (
     <div className='container-page'>
       <main>
-        <h1 className='text-4xl font-bold'><span className='text-red-logo'>ESSAC</span>-Inspect</h1>
+        <h1 className='text-4xl font-bold'><span className='text-red-logo'>ESSAC</span>-Gestion</h1>
         <div className='w-full border-b-2 mt-2 mb-4'></div>
 
         <div className='flex gap-7 items-center justify-between mt-2'>

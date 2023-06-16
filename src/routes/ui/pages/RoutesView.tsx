@@ -83,7 +83,7 @@ const RoutesView = (): ReactElement => {
   return (
     <div>
       <div className='mt-4 mb-2 flex justify-between items-center'>
-        <h1 className="font-bold text-3x text-left  uppercase text-3xl">Recorridos</h1>
+        <h1 className="font-bold text-3x text-left  uppercase text-3xl">Supervisiones</h1>
         <div className='flex gap-2'>
           {routes.length > 0 && <Button color='primary' onClick={() => { setShowFilter(!showFilter) }}>{showFilter ? 'Ocultar filtros' : 'Mostrar filtros'}</Button>}
           {routes.length > 0 && <Button color='secondary' onClick={exportExcel} isLoading={isExportingExcel}>Exportar Excel</Button>}
@@ -126,7 +126,7 @@ const RoutesView = (): ReactElement => {
               <p>{dateRangeStore.isoFormattedStringDateEnd()}</p>
             </div>
           </div>
-          <Button color='secondary' onClick={findAll} isLoading={isLoading}>Buscar recorridos</Button>
+          <Button color='secondary' onClick={findAll} isLoading={isLoading}>Buscar supervisiones</Button>
         </div>
       </div>
 

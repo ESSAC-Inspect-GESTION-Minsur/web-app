@@ -9,6 +9,7 @@ import { CheckpointGroupsService } from '@/checkpoints/services/checkpoint-group
 import moment from 'moment'
 import RoutesServices from '@/routes/services/route.service'
 import { type Route } from '@/routes/models/route.interface'
+import EyeIcon from '@/shared/ui/assets/icons/EyeIcon'
 // import EyeIcon from '@/shared/ui/assets/icons/EyeIcon'
 
 const CheckpointsView = (): ReactElement => {
@@ -138,20 +139,23 @@ const CheckpointsView = (): ReactElement => {
           <div className='border-b-[1px] border-black'>
             {
               lastCheckpoint?.observations.map(observation => {
+                console.log(observation)
                 return (
                   <div key={observation.id} className='flex'>
                     <div className='py-1 w-[25%] grid items-center border-black'>
                       <div className='flex gap-3'>
-                        <p className='py-1 px-2 font-semibold w-1/3'>{observation.fieldName}</p>
-                        {/* {observation.imageEvidence !== '' && <EyeIcon className='w-6 h-6 cursor-pointer transition-all hover:text-red' onClick={() => { imageEvidenceOnClick(observation.imageEvidence, observation.fieldName) }}></EyeIcon>} */}
+                        <p className='py-1 px-2 font-semibold'>{observation.fieldName}</p>
+                        {observation.imageEvidence !== '' && <EyeIcon className='w-6 h-6 cursor-pointer transition-all hover:text-red' onClick={() => { }}></EyeIcon>}
                       </div>
                     </div>
                     <div className='py-1 w-[60%] grid items-center border-l-[1px] border-black'>
-                      <p className='py-1 px-2 font-semibold w-1/3'>{observation.message}</p>
+                      <p className='py-1 px-2 font-semibold '>{observation.message}</p>
                     </div>
                     <div className='w-[15%] flex text-center border-l-[1px] border-black'>
-                      <p className='py-1 w-[50%]'>{observation.status.toUpperCase() === 'PENDIENTE' && 'x'}</p>
-                      <p className='py-1 w-[50%] border-l-[1px] border-black'>{observation.status.toUpperCase() === 'LEVANTADO' && 'x'}</p>
+                      <p className='py-2 w-[50%] self-center'>{observation.status.toUpperCase() === 'PENDIENTE' && 'x'}</p>
+                      <div className='py-2 w-[50%] border-l-[1px] border-black flex justify-center'>
+                        <p className='self-center'>{observation.status.toUpperCase() === 'LEVANTADO' && 'x'}</p>
+                      </div>
                     </div>
                   </div>
                 )
@@ -159,37 +163,6 @@ const CheckpointsView = (): ReactElement => {
             }
           </div>
         </div>
-        {/* <div className='mt-3'>
-          {
-            checkpoints.map((checkpoint, index) => {
-              return (
-                <div key={checkpoint.id} className='my-2 shadow-card p-4 transition-all rounded-xl'>
-                  <h3 className='uppercase font-bold'>Checkpoint #{index + 1}</h3>
-                  <div className='mt-2'>
-                    <p className='uppercase'>Creado Por</p>
-                    <div className='w-[50%] border-b-2'></div>
-                    <p>Nombre: {checkpoint.profile.fullName}</p>
-                    <p>Dni: {checkpoint.profile.dni}</p>
-                  </div>
-                  <div className='mt-2'>
-                    <p>Observaciones</p>
-                    <div className='w-[50%] border-b-2'></div>
-                    <div className='flex gap-10 flex-wrap'>
-                      {
-                        checkpoint.observations.map((observation, index) => {
-                          return <ObservationDetail observation={observation} key={observation.id} index={index} />
-                        })
-                      }
-                    </div>
-
-                  </div>
-
-                </div>
-              )
-            })
-          }
-        </div> */}
-
       </div>
     </div>
 

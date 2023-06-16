@@ -50,7 +50,7 @@ const profileLinks: NavbarLink[] = [
 
 const roleLinks: Record<UserRole, NavbarLink[]> = {
   admin: [
-    { name: 'Checklist - Recorridos', to: '/recorridos', isDropdown: false },
+    { name: 'Checklist - Supervisiones', to: '/recorridos', isDropdown: false },
     {
       name: 'Entidades',
       to: '/admin',

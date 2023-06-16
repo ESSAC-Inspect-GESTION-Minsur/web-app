@@ -42,7 +42,12 @@ const Header = (): ReactElement => {
         <div className='md:w-1/3'>
           <div className='flex gap-4 items-center'>
             <img className='max-w-[180px] md:border-r-[3px] filter brightness-0 invert pr-5 border-red' src="/logo-header.png" alt="" />
-            { isAboveSmallScreens && <img className='max-w-[150px]' src="/brand.png" alt="" />}
+            {isAboveSmallScreens && (
+              <>
+                <img className='max-w-[150px] md:pr-2 md:border-r-[3px] border-white' src="/brand.png" alt="" />
+                <p className='text-white text-xl -ml-1 italic'>GESTION</p>
+              </>
+            )}
           </div>
         </div>
         <div className='sm:flex md:justify-end md:items-center md:w-2/3'>

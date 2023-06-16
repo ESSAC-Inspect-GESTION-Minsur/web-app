@@ -83,7 +83,9 @@ const DriverTable = (): ReactElement => {
           return 'No hay empresas asignadas'
         }
 
-        return driver.companies.join(', ')
+        const names = driver.companies.map((company) => company.name)
+
+        return names.join(', ')
       },
       render: (driver) => {
         const companies = driver.companies
