@@ -11,6 +11,7 @@ import { type FieldReport } from '@/fields/models/field-report.interface'
 import { type FieldGroup } from '@/fields/models/group.interface'
 import { type CheckpointGroup } from '@/checkpoints/models/checkpoint-group.interface'
 import ShowImageEvidence from '@/checkpoints/ui/components/ShowImageEvidence'
+import moment from 'moment'
 
 interface FieldSelected {
   url: string
@@ -127,9 +128,27 @@ const RouteDetail = (): ReactElement => {
     navigate(`/detalle-checkpoints?report-id=${report.id}&route-id=${route.id}&group-id=${group.id}`)
   }
 
+  const groupsToShow = useMemo(() => {
+    const entries = Array.from(fieldReports.entries())
+    entries.sort((a, b) => a[0].localeCompare(b[0]))
+
+    let fieldIndex = 1
+
+    entries.forEach((entry) => {
+      const aux = entry[1]
+
+      aux.forEach((field) => {
+        field.index = fieldIndex++
+      })
+    })
+
+    return entries
+  }, [fieldReports])
+
   return (
     <div className='container-page'>
       <h1 className='text-2xl uppercase font-semibold'>Supervisión - Checklist Subida - {route.code}</h1>
+      <p className='text-sm italic'>** La primera vez que se descargue el reporte, la espera será mayor **</p>
       <div className='flex gap-2 mt-2'>
         {
           report.checkpointGroups.filter((group) => group.type === 'Bajada').map((checkpointGroup) =>
@@ -141,159 +160,148 @@ const RouteDetail = (): ReactElement => {
         }
         <Button color='primary' onClick={exportPdf} isLoading={isPdfLoading}>Exportar PDF</Button>
       </div>
-      <div className='h-[1px] bg-gray-400 w-full my-4'></div>
-      <div className='border-[1px] border-black border-b-0 mx-auto h-full mb-10'>
-        <div className='flex justify-center  border-b-[1px] border-black'>
-          <div className='w-[30%] grid place-items-center border-r-[1px] border-black'>
+      <div className='h bg-gray-400 w-full my-4'></div>
+      <div className='border border-black border-b-0 mx-auto h-full mb-10'>
+        <div className='grid grid-cols-3 border-b border-black'>
+          <div className='grid place-items-center border-r border-black'>
             <div className='p-5'>
               <img src="./logo-header.png" alt="" width={250} />
             </div>
           </div>
-          <div className='w-[30%] border-r-[1px] border-black'>
-            <div className='border-b-[1px] border-black py-2 bg-blue-dark text-white'>
-              <p className='text-center uppercase font-semibold'>Registro</p>
+          <div className='flex flex-col border-r border-black'>
+            <div className="grid place-items-center h-full">
+              <p className='text-center uppercase font-semibold'>Inspección de vehículo {report.reportType.name}</p>
             </div>
-
-            <div className='border-b-[1px] border-black'>
-              <div className='px-2 flex gap-2 '>
+          </div>
+          <div className=''>
+            <div className='h-1/2 border-b border-black'>
+              <div className='h-full px-2 flex gap-2 items-center'>
                 <p>Código:</p>
                 <p >{route.code}</p>
               </div>
             </div>
-            <div className='border-b-[1px] border-black'>
-              <p className='px-2'>Version: 2</p>
-            </div>
-            <div className=''>
-              <div className='flex gap-2 px-2'>
-                <p>Fecha de elaboración</p>
-                <p>{new Date(route.createdAt).toLocaleDateString('Es-es', { year: 'numeric', month: '2-digit', day: '2-digit' })}</p>
-              </div>
-            </div>
-          </div>
-          <div className='w-[40%] flex flex-col border-r-[1px] border-black'>
-            <div className='h-[65%] border-b-[1px] border-black grid place-items-center'>
-              <p className='text-center uppercase font-semibold'>Inspección de {report.reportType.name}</p>
-            </div>
-            <div className='h-[30%] grid place-items-center'>
-              <p className=''>Área: Seguridad y Salud Ocupacional</p>
-            </div>
-          </div>
-        </div>
-        <div className='h-3'></div>
-        <div className='flex border-t-[1px] border-b-[1px] border-black'>
-          <div className='w-[20%] border-r-[1px] border-black bg-blue-dark text-white text-center'>
-            <p className='uppercase py-3 px-2'>Inspector</p>
-          </div>
-          <div className='w-[50%] border-r-[1px] border-black'>
-            <p className='py-3 px-2'>{findSupervisorFullName()}</p>
-          </div>
-          <div className='w-[10%] border-r-[1px] border-black bg-blue-dark text-white text-center'>
-            <p className='uppercase py-3 px-2'>Fecha</p>
-          </div>
-          <div className='w-[20%]'>
-            <p className='py-3 px-2'>2023-02-01</p>
-          </div>
-        </div>
-        <div className='py-3 border-b-[1px] border-black'>
-          <p className='px-4 font-bold uppercase'>1. Información General de la Unidad de Transporte</p>
-        </div>
-        <div className='flex'>
-          <div className='w-[100%] border-r-[1px] border-black'>
-            <div className='border-b-[1px] border-black bg-blue-dark text-white'>
-              <p className='p-2 uppercase'>1.1 Datos de la Unidad de transporte</p>
-            </div>
-            <div className='border-b-[1px] border-black'>
-              <div className='p-2 flex gap-5'>
-                <p>1. Propietario:</p>
-                <p >{findDriverFullName()}</p>
-              </div>
-            </div>
-            <div className='border-b-[1px] border-black'>
-              <div className='p-2 flex gap-5'>
-                <p>2. Placa de Camión / Tracto:</p>
-                <p>{vehicle?.licensePlate}</p>
-              </div>
-            </div>
-            <div className='border-b-[1px] border-black'>
-              <div className='p-2 flex gap-5'>
-                <p>3. Placa de Remolque / Semirremolque:</p>
-                <p>{route.doubleLicensePlate ? cart ? cart.licensePlate : 'NO APLICA' : 'NO APLICA'}</p>
-              </div>
-            </div>
-            <div className=''>
-              <div className='p-2 flex gap-5'>
-                <p>4. Marca y modelo:</p>
-                <p>
-                  {vehicle?.brand} {vehicle?.model}
-                </p>
+            <div className='h-1/2'>
+              <div className='h-full flex gap-2 px-2 items-center'>
+                <p className='text-sm'>Código de Autorización Torre de Control</p>
+                <p></p>
               </div>
             </div>
           </div>
         </div>
-        <div className='border-b-[1px] border-t-[1px] border-black'>
-          <div className='p-2 flex justify-evenly gap-4'>
-            <p><span className='font-bold'>NORMAL: </span> No impide continuar con la operación</p>
-            <p><span className='font-bold'>CRITICO: </span> Impide continuar con la operación</p>
-            <p><span className='font-bold'>NA: </span> No aplica</p>
+        <div className='grid grid-cols-3 border-b border-black'>
+          <div className=' border-r border-black'>
+            <p className='uppercase py-3 px-2 text-sm'>Combustible</p>
           </div>
+          <div className='border-r border-black'>
+            <div className='py-3 px-2'>
+              <p></p>
+            </div>
+          </div>
+          <div className=''>
+            <p className='py-3 px-2 text-sm'>Guía de remisión</p>
+          </div>
+        </div>
 
+        <div className='w-[100%] grid grid-cols-3 border-r text-sm [&>div>div>p]:py-1 [&>div>div]:flex [&>div>div]:gap-1 [&>div>div]:h-[25%] [&>div>div]:border-b [&>div>div]:border-black [&>div>div]:items-center [&>div>div]:overflow-hidden [&>div>div>p]:px-1 [&>div>div>p]:h-full'>
+          <div className='[&>div]:border-r [&>div]:border-b [&>div]:border-black'>
+            <div>
+              <p className='border-r border-black w-[35%]'>Empresa:</p>
+              <p>{route.vehicleCompany}</p>
+            </div>
+            <div>
+              <p className='border-r border-black w-[35%]'>Fecha:</p>
+              <p>{moment(route.createdAt).format('DD/MM/YYYY')}</p>
+            </div>
+            <div>
+              <p className='border-r border-black w-[35%]'>Tipo de Vehículo:</p>
+              <p>{vehicle?.vehicleType.name}</p>
+            </div>
+            <div>
+              <p className='border-r border-black w-[35%]'>Placa de vehículo:</p>
+              <p>{vehicle?.licensePlate}</p>
+            </div>
+          </div>
+          <div className='[&>div]:border-r [&>div]:border-b [&>div]:border-black'>
+            <div>
+              <p className='border-r border-black w-[35%]'>Hora de ingreso:</p>
+              <p>-</p>
+            </div>
+            <div className=''>
+              <p className='border-r border-black w-[35%]'>Contratante:</p>
+              <p>{route.vehicleContractor}</p>
+            </div>
+            <div>
+              <p className='border-r border-black w-[35%]'>Marca:</p>
+              <p>{vehicle?.brand}</p>
+            </div>
+            <div>
+              <p className='border-r border-black w-[35%]'>Año de fabricación:</p>
+              <p>-</p>
+            </div>
+          </div>
+          <div className='[&>div]:border-b [&>div]:border-black '>
+            <div>
+              <p className='border-r border-black w-[35%]'>Hora de salida:</p>
+              <p>-</p>
+            </div>
+            <div>
+              <p className='border-r border-black w-[35%]'>Tipo de Carga:</p>
+              <p>-</p>
+            </div>
+            <div>
+              <p className='border-r border-black w-[35%]'>KM:</p>
+              <p>-</p>
+            </div>
+            <div>
+              <p className='border-r border-black w-[35%]'>Prueba de Alcotest</p>
+              <p>-</p>
+            </div>
+          </div>
         </div>
-        <div className='py-3 border-black'>
-          <p className='px-4 font-bold uppercase'>2. Inspecciones a realizar</p>
-        </div>
+
         <div className='uppercase'>
           {
-            Array.from(fieldReports.entries()).sort((a, b) => a[0].localeCompare(b[0])).map(([key, value], index) => {
+            groupsToShow.map(([key, value]) => {
               return (
                 <div
                   key={key}
-                  className='border-t-[1px] border-black'
+                  className=''
                 >
-                  <div className='border-b-[1px] border-black bg-blue-dark text-white'>
+                  <div className='border-b border-black bg-gray-500 text-white'>
                     <div className='flex'>
-                      <div className='w-[10%] text-center grid items-center'>
-                        <p>critico</p>
+                      <div className='w-[70%] grid items-center'>
+                        <p className='px-2 text-center'>{key.toUpperCase()}</p>
                       </div>
-                      <div className='w-[10%] text-center grid items-center border-l-[1px] border-white'>
-                        <p>Normal</p>
-                      </div>
-                      <div className='w-[65%] grid items-center border-l-[1px] border-white'>
-                        <p className='px-2'>2.{key.toUpperCase()}</p>
-                      </div>
-                      <div className='w-[15%] flex flex-col gap-2 border-l-[1px] border-white'>
+                      <div className='w-[30%] flex flex-col gap-2 border-l border-white'>
                         <p className='text-center'>cumple</p>
-                        <div className='flex text-center border-t-[1px] border-white'>
-                          <p className='w-[33.3%]'>si</p>
-                          <p className='w-[33.3%] border-l-[1px] border-white'>no</p>
-                          <p className='w-[33.3%] border-l-[1px] border-white'>na</p>
+                        <div className='grid grid-cols-3 text-center border-t border-white'>
+                          <p className=''>si</p>
+                          <p className=' border-l border-white'>no</p>
+                          <p className=' border-l border-white'>na</p>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className='border-b-[1px] border-black'>
+                  <div className=''>
                     {
-                      value.map(fieldReport => {
+                      value.map((fieldReport, index) => {
                         return (
-                          <div key={fieldReport.fieldId} className='flex'>
-
-                            <div className='py-2 w-[10%] text-center grid items-center'>
-                              <p>{fieldReport.isCritical && 'X'}</p>
-                            </div>
-                            <div className='py-2 w-[10%] text-center grid items-center border-l-[1px] border-black'>
-                              <p>{!fieldReport.isCritical && 'X'}</p>
-                            </div>
-                            <div className='py-2 w-[65%] grid items-center border-l-[1px] border-black'>
-                              <div className='flex items-center gap-3'>
+                          <div key={fieldReport.fieldId} className='flex border-b border-black'>
+                            <div className='p-2 w-[70%] flex items-center'>
+                              <div className='w-[10%] text-center'>
+                                <p>{fieldReport.index}</p>
+                              </div>
+                              <div className='w-[90%] flex items-center gap-3'>
                                 <p className='py-2 px-2 font-semibold'>{fieldReport.field.name}</p>
                                 {fieldReport.imageEvidence !== '' && <EyeIcon className='w-6 h-6 cursor-pointer transition-all hover:text-red' onClick={() => { imageEvidenceOnClick(fieldReport.imageEvidence, fieldReport.field.name) }}></EyeIcon>}
                               </div>
                             </div>
-                            <div className='w-[15%] flex text-center border-l-[1px] border-black'>
-                              <p className='py-2 w-[33.3%] self-center'>{fieldReport.value.toUpperCase() === 'SI' && 'x'}</p>
-                              <div className='py-2 w-[33.3%] border-l-[1px] border-black flex justify-center'>
+                            <div className='w-[30%] grid grid-cols-3 text-center border-l border-black'>
+                              <p className='py-2 self-center'>{fieldReport.value.toUpperCase() === 'SI' && 'x'}</p>
+                              <div className='py-2 border-l border-black flex justify-center'>
                                 <p className='self-center'>{fieldReport.value.toUpperCase() === 'NO' && 'x'}</p>
                               </div>
-                              <div className='py-2 w-[33.3%] border-l-[1px] border-black flex justify-center'>
+                              <div className='py-2 border-l border-black flex justify-center'>
                                 <p className='self-center'>{fieldReport.value.toUpperCase() === 'NO APLICA' && 'x'}</p>
                               </div>
                             </div>

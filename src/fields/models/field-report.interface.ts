@@ -10,4 +10,6 @@ export interface FieldReport {
   imageEvidence: string
   group: Group
   field: Field
+
+  index: number
 }
