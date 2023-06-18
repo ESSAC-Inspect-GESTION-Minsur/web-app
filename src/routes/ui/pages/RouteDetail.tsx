@@ -353,6 +353,10 @@ const RouteDetail = (): ReactElement => {
             </div>
           </div>
         </div>
+
+        <div className='border-b border-black'>
+          <p className='px-2 py-3 italic font-semibold'>Nota:La verificación del documento y su validación se asume con las respectivas firmas del presente documento  (trabajador y supervisor )</p>
+        </div>
       </div>
 
       {showImage && <ShowImageEvidence isOpen={showImage} imageUrl={fieldSelected.url} name={fieldSelected.name} onClose={() => { setShowImage(false) }} />}
