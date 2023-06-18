@@ -95,6 +95,10 @@ const RouteDetail = (): ReactElement => {
     setShowImage(true)
   }
 
+  const driver = useMemo(() => {
+    return route.routeProfiles.find((routeProfile) => routeProfile.role.toUpperCase() === 'CONDUCTOR') ?? null
+  }, [route])
+
   const findDriverFullName = (): string => {
     const driver = route.routeProfiles.find((routeProfile) => routeProfile.role.toUpperCase() === 'CONDUCTOR')
     return driver?.profile.fullName ?? 'No hay conductor'
@@ -175,7 +179,7 @@ const RouteDetail = (): ReactElement => {
           </div>
           <div className=''>
             <div className='h-1/2 border-b border-black'>
-              <div className='h-full px-2 flex gap-2 items-center'>
+              <div className='h-full px-2 flex gap-2 items-center font-semibold'>
                 <p>Código:</p>
                 <p >{route.code}</p>
               </div>
@@ -190,7 +194,7 @@ const RouteDetail = (): ReactElement => {
         </div>
         <div className='grid grid-cols-3 border-b border-black'>
           <div className=' border-r border-black'>
-            <p className='uppercase py-3 px-2 text-sm'>Combustible</p>
+            <p className='uppercase py-3 px-2 text-sm font-semibold'>Combustible</p>
           </div>
           <div className='border-r border-black'>
             <div className='py-3 px-2'>
@@ -198,63 +202,63 @@ const RouteDetail = (): ReactElement => {
             </div>
           </div>
           <div className=''>
-            <p className='py-3 px-2 text-sm'>Guía de remisión</p>
+            <p className='py-3 px-2 text-sm font-semibold'>Guía de remisión</p>
           </div>
         </div>
 
-        <div className='w-[100%] grid grid-cols-3 border-r text-sm [&>div>div>p]:py-1 [&>div>div]:flex [&>div>div]:gap-1 [&>div>div]:h-[25%] [&>div>div]:border-b [&>div>div]:border-black [&>div>div]:items-center [&>div>div]:overflow-hidden [&>div>div>p]:px-1 [&>div>div>p]:h-full'>
+        <div className='w-[100%] h-56 grid grid-cols-3 border-r text-sm [&>div>div>p]:py-1 [&>div>div]:flex [&>div>div]:gap-1 [&>div>div]:h-[25%] [&>div>div]:border-b [&>div>div]:border-black [&>div>div]:items-center [&>div>div]:overflow-hidden [&>div>div>p]:px-1 [&>div>div>p]:h-full'>
           <div className='[&>div]:border-r [&>div]:border-b [&>div]:border-black'>
             <div>
-              <p className='border-r border-black w-[35%]'>Empresa:</p>
-              <p>{route.vehicleCompany}</p>
+              <p className='border-r border-black w-[30%] font-semibold'>Empresa:</p>
+              <p className='w-[70%]'>{route.vehicleCompany}</p>
             </div>
             <div>
-              <p className='border-r border-black w-[35%]'>Fecha:</p>
-              <p>{moment(route.createdAt).format('DD/MM/YYYY')}</p>
+              <p className='border-r border-black w-[30%] font-semibold'>Fecha:</p>
+              <p className='w-[70%]'>{moment(route.createdAt).format('DD/MM/YYYY')}</p>
             </div>
             <div>
-              <p className='border-r border-black w-[35%]'>Tipo de Vehículo:</p>
-              <p>{vehicle?.vehicleType.name}</p>
+              <p className='border-r border-black w-[30%] font-semibold'>Tipo de Vehículo:</p>
+              <p className='w-[70%]'>{vehicle?.vehicleType.name}</p>
             </div>
             <div>
-              <p className='border-r border-black w-[35%]'>Placa de vehículo:</p>
-              <p>{vehicle?.licensePlate}</p>
+              <p className='border-r border-black w-[30%] font-semibold'>Placa de vehículo:</p>
+              <p className='w-[70%]'>{vehicle?.licensePlate}</p>
             </div>
           </div>
           <div className='[&>div]:border-r [&>div]:border-b [&>div]:border-black'>
             <div>
-              <p className='border-r border-black w-[35%]'>Hora de ingreso:</p>
-              <p>-</p>
+              <p className='border-r border-black w-[30%] font-semibold'>Hora de ingreso:</p>
+              <p className='w-[70%]'>-</p>
             </div>
             <div className=''>
-              <p className='border-r border-black w-[35%]'>Contratante:</p>
-              <p>{route.vehicleContractor}</p>
+              <p className='border-r border-black w-[30%] font-semibold'>Contratante:</p>
+              <p className='w-[70%]'>{route.vehicleContractor}</p>
             </div>
             <div>
-              <p className='border-r border-black w-[35%]'>Marca:</p>
-              <p>{vehicle?.brand}</p>
+              <p className='border-r border-black w-[30%] font-semibold'>Marca:</p>
+              <p className='w-[70%]'>{vehicle?.brand}</p>
             </div>
             <div>
-              <p className='border-r border-black w-[35%]'>Año de fabricación:</p>
-              <p>-</p>
+              <p className='border-r border-black w-[30%] font-semibold'>Año de fabricación:</p>
+              <p className='w-[70%]'>-</p>
             </div>
           </div>
           <div className='[&>div]:border-b [&>div]:border-black '>
             <div>
-              <p className='border-r border-black w-[35%]'>Hora de salida:</p>
-              <p>-</p>
+              <p className='border-r border-black w-[30%] font-semibold'>Hora de salida:</p>
+              <p className='w-[70%]'>-</p>
             </div>
             <div>
-              <p className='border-r border-black w-[35%]'>Tipo de Carga:</p>
-              <p>-</p>
+              <p className='border-r border-black w-[30%] font-semibold'>Tipo de Carga:</p>
+              <p className='w-[70%]'>-</p>
             </div>
             <div>
-              <p className='border-r border-black w-[35%]'>KM:</p>
-              <p>-</p>
+              <p className='border-r border-black w-[30%] font-semibold'>KM:</p>
+              <p className='w-[70%]'>-</p>
             </div>
             <div>
-              <p className='border-r border-black w-[35%]'>Prueba de Alcotest</p>
-              <p>-</p>
+              <p className='border-r border-black w-[30%] font-semibold'>Prueba de Alcotest</p>
+              <p className='w-[70%]'>-</p>
             </div>
           </div>
         </div>
@@ -287,22 +291,26 @@ const RouteDetail = (): ReactElement => {
                       value.map((fieldReport, index) => {
                         return (
                           <div key={fieldReport.fieldId} className='flex border-b border-black'>
-                            <div className='p-2 w-[70%] flex items-center'>
-                              <div className='w-[10%] text-center'>
-                                <p>{fieldReport.index}</p>
+                            <div className='w-[70%] flex items-center'>
+                              <div className='h-full w-[10%] text-center border-r border-black grid place-items-center'>
+                                <p className='py-3'>{fieldReport.index}</p>
                               </div>
-                              <div className='w-[90%] flex items-center gap-3'>
-                                <p className='py-2 px-2 font-semibold'>{fieldReport.field.name}</p>
-                                {fieldReport.imageEvidence !== '' && <EyeIcon className='w-6 h-6 cursor-pointer transition-all hover:text-red' onClick={() => { imageEvidenceOnClick(fieldReport.imageEvidence, fieldReport.field.name) }}></EyeIcon>}
+                              <div className='w-[90%]'>
+                                <div className='flex items-center gap-3'>
+                                  <p className='py-2 px-2 font-semibold'>{fieldReport.field.name}</p>
+                                  {fieldReport.imageEvidence !== '' && <EyeIcon className='w-6 h-6 cursor-pointer transition-all hover:text-red' onClick={() => { imageEvidenceOnClick(fieldReport.imageEvidence, fieldReport.field.name) }}></EyeIcon>}
+                                </div>
                               </div>
                             </div>
-                            <div className='w-[30%] grid grid-cols-3 text-center border-l border-black'>
-                              <p className='py-2 self-center'>{fieldReport.value.toUpperCase() === 'SI' && 'x'}</p>
-                              <div className='py-2 border-l border-black flex justify-center'>
-                                <p className='self-center'>{fieldReport.value.toUpperCase() === 'NO' && 'x'}</p>
-                              </div>
-                              <div className='py-2 border-l border-black flex justify-center'>
-                                <p className='self-center'>{fieldReport.value.toUpperCase() === 'NO APLICA' && 'x'}</p>
+                            <div className='w-[30%] border-l border-black'>
+                              <div className='grid grid-cols-3 text-center h-full'>
+                                <p className='py-2 self-center'>{fieldReport.value.toUpperCase() === 'SI' && 'x'}</p>
+                                <div className='py-2 border-l border-black flex justify-center'>
+                                  <p className='self-center'>{fieldReport.value.toUpperCase() === 'NO' && 'x'}</p>
+                                </div>
+                                <div className='py-2 border-l border-black flex justify-center'>
+                                  <p className='self-center'>{fieldReport.value.toUpperCase() === 'NO APLICA' && 'x'}</p>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -314,6 +322,36 @@ const RouteDetail = (): ReactElement => {
               )
             })
           }
+        </div>
+
+        <div className='grid grid-cols-2 text-center border-b border-black'>
+          <div className='border-r border-black'>
+            <div className='border-b border-black bg-gray-500 text-white py-2'>
+              <p>INSPECCIONADO POR CONDUCTOR</p>
+            </div>
+            <div className='py-2 flex flex-col justify-center border-b border-black'>
+              <p>Nombre y apellido</p>
+              <p className='font-bold'>{findDriverFullName()}</p>
+            </div>
+            <div className='text-start p-2 border-b border-black'>
+              <p className='font-bold'>Nº licencia: <span className='font-normal'>{driver?.profile.license}</span></p>
+            </div>
+            <div className='text-start p-2'>
+              <p className='font-bold'>Firma</p>
+            </div>
+          </div>
+          <div>
+            <div className='border-b border-black bg-gray-500 text-white py-2'>
+              <p>INSPECCIONADO POR SUPERVISOR</p>
+            </div>
+            <div className='py-2 flex flex-col justify-center border-b border-black'>
+              <p>Nombre y apellido</p>
+              <p className='font-bold'>{findSupervisorFullName()}</p>
+            </div>
+            <div className='text-start p-2'>
+              <p className='font-bold'>Firma</p>
+            </div>
+          </div>
         </div>
       </div>
 
