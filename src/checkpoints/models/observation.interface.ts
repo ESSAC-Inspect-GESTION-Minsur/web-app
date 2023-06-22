@@ -6,6 +6,7 @@ export interface Observation {
   message: string
   imageEvidence: string
   status: OBSERVATION_STATUS
+  index: number
 
   createdAt: string
   updatedAt: string
