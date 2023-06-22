@@ -3,13 +3,17 @@ import React, { type ReactElement, useEffect, useState } from 'react'
 import { type AppDispatch } from '@/shared/config/store'
 import { useDispatch, useSelector } from 'react-redux'
 import Button from '../components/Button'
-import { findAllRoutes, getDateRange, getLastDateRequest, getReports } from '@/shared/config/store/features/routes-slice'
+import { findAllRoutes, getDateRange, getLastDateRequest, getReports, getStatus } from '@/shared/config/store/features/routes-slice'
 import { DateRange, type DateRangeObject, LOCALE_OPTIONS } from '@/shared/types/date-range'
+import { STATUS } from '@/shared/config/store/types'
 
 const Home = (): ReactElement => {
   // const isAboveSmallScreens = useMediaQuery('(min-width: 640px)')
   const dispatch = useDispatch<AppDispatch>()
   const reports = useSelector(getReports)
+  const routeStatus = useSelector(getStatus)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
   const lastDateRequest = useSelector(getLastDateRequest)
   const dateRangeFromStore = useSelector(getDateRange)
 
@@ -27,6 +31,10 @@ const Home = (): ReactElement => {
   useEffect(() => {
     groupReportsByReportType()
   }, [reports])
+
+  useEffect(() => {
+    setIsLoading(routeStatus === STATUS.PENDING)
+  }, [routeStatus])
 
   const findAll = (): void => {
     void dispatch(findAllRoutes({ dateRange, profileId: '' }))
@@ -99,7 +107,7 @@ const Home = (): ReactElement => {
                 <p>{dateRangeFromStore.isoFormattedStringDateEnd()}</p>
               </div>
             </div>
-            <Button color='secondary' onClick={findAll}>Buscar recorridos</Button>
+            <Button color='secondary' onClick={findAll} isLoading={isLoading}>Buscar recorridos</Button>
           </div>
         </div>
 
