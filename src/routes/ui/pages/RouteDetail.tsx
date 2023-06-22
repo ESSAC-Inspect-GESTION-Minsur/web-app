@@ -165,7 +165,7 @@ const RouteDetail = (): ReactElement => {
               onClick={() => { showCheckpoint(checkpointGroup) }}>Supervisión - Checklist {checkpointGroup.type}</Button>
           )
         }
-        <Button color='primary' onClick={exportPdf} isLoading={isPdfLoading}>Exportar PDF</Button>
+        {route.code !== '' && <Button color='primary' onClick={exportPdf} isLoading={isPdfLoading}>Exportar PDF</Button>}
       </div>
       <div className='h bg-gray-400 w-full my-4'></div>
       <div className='border border-black border-b-0 mx-auto h-full mb-10'>
