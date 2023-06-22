@@ -20,7 +20,7 @@ export class CheckpointPDFServices extends AppServices {
     super({ baseUrl: 'checkpoints', contentType: 'application/pdf' })
   }
 
-  exportPdf = async (id: string): Promise<void> => {
+  exportPdf = async (id: string, type: string, code: string): Promise<void> => {
     await this.get<any>(`/${id}/generate-pdf`, {
       responseType: 'blob'
     })
@@ -30,7 +30,7 @@ export class CheckpointPDFServices extends AppServices {
         const link = document.createElement('a')
 
         link.href = downloadUrl
-        link.download = `${id}.pdf`
+        link.download = `${code}_${type}.pdf`.toUpperCase()
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)

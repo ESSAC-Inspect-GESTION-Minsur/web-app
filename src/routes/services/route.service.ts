@@ -35,7 +35,7 @@ export class RoutePDFServices extends AppServices {
     super({ baseUrl: 'routes', contentType: 'application/pdf' })
   }
 
-  exportPdf = async (code: string): Promise<void> => {
+  exportPdf = async (code: string, type: string): Promise<void> => {
     await this.get<any>(`/${code}/generate-pdf`, {
       responseType: 'blob'
     })
@@ -45,7 +45,7 @@ export class RoutePDFServices extends AppServices {
         const link = document.createElement('a')
 
         link.href = downloadUrl
-        link.download = `${code}.pdf`
+        link.download = `${code}_${type}.pdf`.toUpperCase()
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)

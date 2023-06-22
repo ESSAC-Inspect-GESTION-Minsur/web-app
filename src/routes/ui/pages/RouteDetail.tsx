@@ -112,7 +112,7 @@ const RouteDetail = (): ReactElement => {
   const exportPdf = (): void => {
     setIsPdfLoading(true)
     const routePDFService = new RoutePDFServices()
-    void routePDFService.exportPdf(route.code)
+    void routePDFService.exportPdf(route.code, 'SUBIDA')
       .then(() => {
         setIsPdfLoading(false)
       })

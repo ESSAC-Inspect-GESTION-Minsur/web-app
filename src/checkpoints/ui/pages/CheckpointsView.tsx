@@ -89,7 +89,7 @@ const CheckpointsView = (): ReactElement => {
   const exportPdf = (): void => {
     setIsPdfLoading(true)
     const checkpointPDFService = new CheckpointPDFServices()
-    void checkpointPDFService.exportPdf(lastCheckpoint?.id ?? '')
+    void checkpointPDFService.exportPdf(lastCheckpoint?.id ?? '', 'BAJADA', route?.code ?? '')
       .then(() => {
         setIsPdfLoading(false)
       })
